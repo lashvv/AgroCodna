@@ -1,0 +1,431 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ნიადაგის ანალიზი – AgroCodna</title>
+  <link rel="stylesheet" href="{% static 'AgroCodna/style/ai-analyzer.css' %}"/>
+</head>
+<body>
+
+<nav>
+  <a href="{% url '/' %}" class="logo">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="8" fill="#2A2518"/>
+      <path d="M18 6C18 6 10 12 10 20C10 24.4 13.6 28 18 28C22.4 28 26 24.4 26 20C26 12 18 6 18 6Z" fill="#5A8A3C" opacity="0.9"/>
+      <path d="M18 10L18 28" stroke="#7AB55A" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 17C18 17 14 14 12 16" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 21C18 21 22 18 24 20" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Agro<span>Codna</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{% url '/' %}">როგორ მუშაობს</a></li>
+    <li><a href="{% url 'articles-videos' %}">სტატიები</a></li>
+    <li><a href="{% url 'qa' %}">კითხვა-პასუხი</a></li>
+    <li><a href="{% url 'cow-calculator' %}">კალკულატორი</a></li>
+    <li><a href="{% url 'soil-analyzer' %}">AI ანალიზი</a></li>
+          {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}" class="nav-cta">გამოსვლა</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}" class="nav-cta">შესვლა</a></li>
+      {% endif %}
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb">
+    <a href="{% url '/' %}">მთავარი</a>
+    <span class="sep">›</span>
+    <span>ნიადაგის AI ანალიზი</span>
+  </div>
+
+  <div class="page-header">
+    <div class="eyebrow">AI-powered · Claude Vision</div>
+    <h1>ნიადაგის <em>ანალიზი</em> ფოტოთი</h1>
+    <p>გადაუღე ფოტო შენს ნიადაგს და AI მყისიერად მოგაწვდის ინფორმაციას მის მდგომარეობაზე, პრობლემებსა და რეკომენდაციებზე.</p>
+  </div>
+
+  <!-- API KEY -->
+  <div class="api-key-block">
+    <label>Anthropic API Key</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off"/>
+    <span class="key-hint">გასაღები გამოიყენება მხოლოდ ბრაუზერში, სერვერზე არ იგზავნება. <a href="https://console.anthropic.com" target="_blank" style="color:#7AB55A">console.anthropic.com</a>-ზე შექმენი უფასოდ.</span>
+  </div>
+
+  <!-- UPLOAD ZONE -->
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="image/*"/>
+    <div id="uploadPlaceholder">
+      <div class="upload-icon">🌱</div>
+      <div class="upload-label">ფოტოს ატვირთვა ან გადმოთრევა</div>
+      <div class="upload-sub">გადაიღე ნიადაგი ახლოდან, კარგი განათებით</div>
+      <div class="upload-formats">
+        <span>JPG</span><span>PNG</span><span>WEBP</span><span>HEIC</span>
+      </div>
+    </div>
+    <img id="previewImg" class="preview-img" style="display:none"/>
+    <div class="preview-overlay" id="previewOverlay" style="display:none">
+      <button onclick="clearImage()">სხვა ფოტო</button>
+    </div>
+  </div>
+
+  <!-- ANALYZE BUTTON -->
+  <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyzeImage()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    ნიადაგის ანალიზი
+  </button>
+
+  <!-- RESULT PANEL -->
+  <div class="result-panel" id="resultPanel" style="display:none">
+
+    <!-- Loading -->
+    <div class="loading-state" id="loadingState">
+      <div class="loading-spinner"></div>
+      <div class="loading-title">AI აანალიზებს შენს ნიადაგს...</div>
+      <div class="loading-steps">
+        <div class="ls" id="ls1">📷 ფოტოს დამუშავება</div>
+        <div class="ls" id="ls2">🔬 ფერის და ტექსტურის ანალიზი</div>
+        <div class="ls" id="ls3">🧪 ნუტრიენტების შეფასება</div>
+        <div class="ls" id="ls4">📋 რეკომენდაციების მომზადება</div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-state" id="errorState" style="display:none">
+      <div class="error-icon">⚠️</div>
+      <p id="errorMsg">შეცდომა მოხდა</p>
+      <small id="errorDetail"></small>
+    </div>
+
+    <!-- Result -->
+    <div id="resultContent" style="display:none">
+      <div class="result-header">
+        <div class="result-icon">🔬</div>
+        <div>
+          <div class="result-title">ანალიზის შედეგი</div>
+          <div class="result-sub" id="resultTimestamp"></div>
+        </div>
+        <div class="status-chip" id="statusChip">შეფასება</div>
+      </div>
+
+      <div class="score-section">
+        <div class="score-label">ნიადაგის ჯანმრთელობის ინდექსი</div>
+        <div class="score-bar-wrap">
+          <div class="score-bar" id="scoreBar" style="width:0%"></div>
+        </div>
+        <div class="score-row">
+          <span class="score-num" id="scoreNum" style="color:#7AB55A">–</span>
+          <span class="score-desc" id="scoreDesc">/ 100</span>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="m-label">ფერი</div>
+          <div class="m-value" id="mColor">–</div>
+          <div class="m-sub" id="mColorSub">ნიადაგის ტონი</div>
+        </div>
+        <div class="metric">
+          <div class="m-label">ტექსტურა</div>
+          <div class="m-value" id="mTexture">–</div>
+          <div class="m-sub" id="mTextureSub">სტრუქტურა</div>
+        </div>
+        <div class="metric">
+          <div class="m-label">ტენიანობა</div>
+          <div class="m-value" id="mMoisture">–</div>
+          <div class="m-sub" id="mMoistureSub">ვიზუალური შეფასება</div>
+        </div>
+      </div>
+
+      <div class="analysis-body">
+        <div class="section-title">დეტალური ანალიზი</div>
+        <div class="analysis-text" id="analysisText"></div>
+
+        <div class="recommendations" id="recommendationsBlock">
+          <div class="section-title" style="margin-top:1.5rem">რეკომენდაციები</div>
+          <div id="recommendationsList"></div>
+        </div>
+      </div>
+
+      <div class="ai-footer">
+        <span class="ai-label"><span class="ai-dot"></span> Claude Vision AI · მხოლოდ ვიზუალური ანალიზი, არა ლაბორატორიული</span>
+        <button class="new-analysis-btn" onclick="clearAll()">ახალი ანალიზი</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tips-row" id="tipsRow">
+    <div class="tip">
+      <div class="tip-icon">📸</div>
+      <div class="tip-title">სწორი ფოტო</div>
+      <div class="tip-body">გადაიღე ნიადაგი 20-30 სმ სიახლოვიდან, კარგი დღის შუქზე. ჩრდილი ამახინჯებს ფერს.</div>
+    </div>
+    <div class="tip">
+      <div class="tip-icon">🔍</div>
+      <div class="tip-title">რას ხედავს AI</div>
+      <div class="tip-body">ფერი, ტექსტურა, ტენიანობა, ორგანული ნივთიერებები, ეროზიის ნიშნები, pH ვარაუდი.</div>
+    </div>
+    <div class="tip">
+      <div class="tip-icon">⚗️</div>
+      <div class="tip-title">ლაბორატორია</div>
+      <div class="tip-body">AI ანალიზი სასარგებლოა პირველი შეფასებისთვის. ზუსტი pH-ისთვის ლაბ. ტესტი გჭირდება.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SYSTEM_PROMPT = `You are an expert agronomist and soil scientist helping Georgian farmers. 
+Analyze the soil image provided and return a JSON response (ONLY JSON, no markdown, no explanation outside JSON).
+
+The JSON must have this exact structure:
+{
+  "healthScore": <number 0-100>,
+  "status": <"კარგი" | "საშუალო" | "ცუდი">,
+  "statusLevel": <"good" | "warning" | "bad">,
+  "color": "<soil color in Georgian, e.g. მუქი ყავისფერი>",
+  "colorSub": "<what it indicates, short, Georgian>",
+  "texture": "<texture type, Georgian, e.g. თიხნარი>",
+  "textureSub": "<brief implication, Georgian>",
+  "moisture": "<moisture level, Georgian, e.g. ზომიერი>",
+  "moistureSub": "<brief note, Georgian>",
+  "analysis": "<3-4 paragraph detailed analysis in Georgian. Cover: soil color and what it means, texture and structure, visible organic matter, potential pH range, crop suitability, any problems spotted>",
+  "recommendations": [
+    {"icon": "🌱", "text": "<recommendation in Georgian>", "priority": <"high"|"medium"|"low">},
+    {"icon": "💧", "text": "<recommendation in Georgian>", "priority": <"high"|"medium"|"low">},
+    {"icon": "🧪", "text": "<recommendation in Georgian>", "priority": <"high"|"medium"|"low">}
+  ]
+}
+
+Be specific and practical. If the image is not soil, say so in the analysis and set healthScore to 0.
+Always respond in Georgian language. Return ONLY the JSON object.`;
+
+let currentImageB64 = null;
+let currentImageType = null;
+
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const previewImg = document.getElementById('previewImg');
+const previewOverlay = document.getElementById('previewOverlay');
+const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const resultPanel = document.getElementById('resultPanel');
+
+// Drag & drop
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) handleFile(file);
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) handleFile(fileInput.files[0]);
+});
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    const parts = dataUrl.split(',');
+    currentImageB64 = parts[1];
+    currentImageType = file.type || 'image/jpeg';
+
+    previewImg.src = dataUrl;
+    previewImg.style.display = 'block';
+    previewOverlay.style.display = 'flex';
+    uploadPlaceholder.style.display = 'none';
+    uploadZone.classList.add('has-image');
+    fileInput.style.pointerEvents = 'none';
+
+    analyzeBtn.disabled = false;
+    resultPanel.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  currentImageB64 = null;
+  previewImg.style.display = 'none';
+  previewOverlay.style.display = 'none';
+  uploadPlaceholder.style.display = 'block';
+  uploadZone.classList.remove('has-image');
+  fileInput.style.pointerEvents = '';
+  fileInput.value = '';
+  analyzeBtn.disabled = true;
+  resultPanel.style.display = 'none';
+}
+
+function clearAll() {
+  clearImage();
+  document.getElementById('tipsRow').style.display = '';
+}
+
+async function analyzeImage() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) { alert('API Key შეიყვანე!'); return; }
+  if (!currentImageB64) { alert('ფოტო ატვირთე!'); return; }
+
+  analyzeBtn.disabled = true;
+  analyzeBtn.innerHTML = '<div class="btn-spinner"></div> ანალიზი მიმდინარეობს...';
+
+  resultPanel.style.display = 'block';
+  document.getElementById('tipsRow').style.display = 'none';
+  showLoading();
+
+  // Animate loading steps
+  const steps = ['ls1','ls2','ls3','ls4'];
+  let stepIdx = 0;
+  const stepTimer = setInterval(() => {
+    if (stepIdx > 0) document.getElementById(steps[stepIdx-1]).classList.remove('active');
+    if (stepIdx > 0) document.getElementById(steps[stepIdx-1]).classList.add('done');
+    if (stepIdx < steps.length) {
+      document.getElementById(steps[stepIdx]).classList.add('active');
+      stepIdx++;
+    } else {
+      clearInterval(stepTimer);
+    }
+  }, 900);
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1500,
+        system: SYSTEM_PROMPT,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: { type: 'base64', media_type: currentImageType, data: currentImageB64 }
+            },
+            { type: 'text', text: 'გაანალიზე ეს ნიადაგი და დამიბრუნე JSON.' }
+          ]
+        }]
+      })
+    });
+
+    clearInterval(stepTimer);
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const rawText = data.content[0].text.trim();
+
+    let result;
+    try {
+      const cleaned = rawText.replace(/^```json\s*/,'').replace(/```\s*$/,'').trim();
+      result = JSON.parse(cleaned);
+    } catch(e) {
+      throw new Error('AI-ის პასუხი არ დამუშავდა. სცადე თავიდან.');
+    }
+
+    showResult(result);
+
+  } catch(err) {
+    clearInterval(stepTimer);
+    showError(err.message);
+  } finally {
+    analyzeBtn.disabled = false;
+    analyzeBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> ნიადაგის ანალიზი';
+  }
+}
+
+function showLoading() {
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('errorState').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'none';
+  document.querySelectorAll('.ls').forEach(el => { el.classList.remove('active','done'); });
+}
+
+function showError(msg) {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('errorState').style.display = 'block';
+  document.getElementById('resultContent').style.display = 'none';
+  document.getElementById('errorMsg').textContent = 'ანალიზი ვერ მოხერხდა';
+  document.getElementById('errorDetail').textContent = msg;
+}
+
+function showResult(r) {
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('errorState').style.display = 'none';
+  document.getElementById('resultContent').style.display = 'block';
+
+  // Timestamp
+  document.getElementById('resultTimestamp').textContent =
+    new Date().toLocaleString('ka-GE', { hour:'2-digit', minute:'2-digit', day:'numeric', month:'long' });
+
+  // Status chip
+  const chip = document.getElementById('statusChip');
+  chip.textContent = r.status || 'შეფასება';
+  chip.className = 'status-chip ' + (r.statusLevel || 'warning');
+
+  // Score bar
+  const score = Math.min(100, Math.max(0, r.healthScore || 0));
+  const scoreColor = score >= 70 ? '#7AB55A' : score >= 40 ? '#C8A84B' : '#E07A5A';
+  setTimeout(() => {
+    document.getElementById('scoreBar').style.width = score + '%';
+    document.getElementById('scoreBar').style.background = scoreColor;
+  }, 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('scoreNum').style.color = scoreColor;
+
+  // Metrics
+  document.getElementById('mColor').textContent = r.color || '–';
+  document.getElementById('mColorSub').textContent = r.colorSub || '';
+  document.getElementById('mTexture').textContent = r.texture || '–';
+  document.getElementById('mTextureSub').textContent = r.textureSub || '';
+  document.getElementById('mMoisture').textContent = r.moisture || '–';
+  document.getElementById('mMoistureSub').textContent = r.moistureSub || '';
+
+  // Analysis text
+  const analysisEl = document.getElementById('analysisText');
+  analysisEl.innerHTML = '';
+  if (r.analysis) {
+    r.analysis.split('\n').filter(p => p.trim()).forEach(para => {
+      const p = document.createElement('p');
+      p.innerHTML = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      analysisEl.appendChild(p);
+    });
+  }
+
+  // Recommendations
+  const recList = document.getElementById('recommendationsList');
+  recList.innerHTML = '';
+  if (r.recommendations && r.recommendations.length) {
+    r.recommendations.forEach(rec => {
+      const div = document.createElement('div');
+      div.className = 'rec-item';
+      div.innerHTML = `
+        <span class="rec-icon">${rec.icon || '💡'}</span>
+        <span class="rec-text">${rec.text}</span>
+        <span class="rec-priority ${rec.priority || 'medium'}">${
+          rec.priority === 'high' ? 'სასწრაფო' :
+          rec.priority === 'low'  ? 'სურვილისამებრ' : 'საჭირო'
+        }</span>
+      `;
+      recList.appendChild(div);
+    });
+  }
+}
+</script>
+
+</body>
+</html>

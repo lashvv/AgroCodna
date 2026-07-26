@@ -1,0 +1,541 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>კითხვა-პასუხი – AgroCodna</title>
+  <link rel="stylesheet" href="{% static 'AgroCodna/style/qa.css' %}"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="{% url '/' %}" class="logo">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="8" fill="#2A2518"/>
+      <path d="M18 6C18 6 10 12 10 20C10 24.4 13.6 28 18 28C22.4 28 26 24.4 26 20C26 12 18 6 18 6Z" fill="#5A8A3C" opacity="0.9"/>
+      <path d="M18 10L18 28" stroke="#7AB55A" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 17C18 17 14 14 12 16" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 21C18 21 22 18 24 20" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Agro<span>Codna</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{% url '/' %}#how">როგორ მუშაობს</a></li>
+    <li><a href="{% url 'articles-videos' %}">სტატიები</a></li>
+    <li><a href="{% url 'qa' %}" class="active">კითხვა-პასუხი</a></li>
+    <li><a href="{% url 'cow-calculator' %}">კალკულატორი</a></li>
+    <li><a href="{% url 'soil-analyzer' %}">AI ანალიზი</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}" class="nav-cta">გამოსვლა</a></li>
+    {% else %}
+    <li><a href="{% url 'login' %}" class="nav-cta">შესვლა</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="header-left">
+    <div class="breadcrumb">
+      <a href="{% url '/' %}">მთავარი</a>
+      <span class="sep">›</span>
+      <span>კითხვა-პასუხი</span>
+    </div>
+    <h1>ფერმერთა <em>ფორუმი</em></h1>
+    <p>დასვი კითხვა, მიიღე AI-ის მყისიერი პასუხი და ექსპერტების დამოწმებული რჩევა.</p>
+  </div>
+  {% if user.is_authenticated %}
+  <a href="#" class="ask-btn-large" id="openModal">
+    {% else %}
+  <a href="{% url 'login' %}" class="ask-btn-large">
+    {% endif %}
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    კითხვის დასმა
+  </a>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls-bar">
+  <div class="search-wrap">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="მოძებნე კითხვა..."/>
+  </div>
+
+  <div class="status-tabs">
+    <button class="active" data-status="all">ყველა <span class="count">24</span></button>
+    <button data-status="open">ღია <span class="count">11</span></button>
+    <button data-status="solved">გადაჭრილი <span class="count">13</span></button>
+  </div>
+
+  <select class="sort-select">
+    <option value="newest">უახლესი</option>
+    <option value="votes">ყველაზე ხმიანი</option>
+    <option value="active">აქტიური</option>
+  </select>
+</div>
+
+<!-- CATEGORY CHIPS -->
+<div class="categories" id="chips">
+  <button class="chip active" data-cat="all">🌿 ყველა</button>
+  <button class="chip" data-cat="soil">🪨 ნიადაგი</button>
+  <button class="chip" data-cat="water">💧 მორწყვა</button>
+  <button class="chip" data-cat="pest">🐛 მავნებლები</button>
+  <button class="chip" data-cat="harvest">🌾 მოსავალი</button>
+  <button class="chip" data-cat="market">📊 ბაზარი</button>
+  <button class="chip" data-cat="livestock">🐄 პირუტყვი</button>
+  <button class="chip" data-cat="tech">🔧 ტექნოლოგია</button>
+</div>
+
+<!-- MAIN -->
+<div class="qa-layout">
+
+  <!-- FEED -->
+  <div class="qa-feed">
+    <div class="feed-meta" id="feedMeta"><strong>24</strong> კითხვა</div>
+
+    <!-- Q1 - solved, with AI strip -->
+     <a href="{% url 'question' %}">
+    <div class="q-card solved" data-status="solved" data-cat="soil" data-title="ჩემი სიმინდი ყვითლდება">
+      <div class="vote-col">
+        <button class="vote-btn voted">▲</button>
+        <span class="vote-count">34</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge solved">✓ გადაჭრილი</span>
+          <span class="cat-tag">🪨 ნიადაგი</span>
+        </div>
+        <div class="q-title">რატომ ყვითლდება ჩემი სიმინდი ივლისში — ნიადაგი თუ წყალი?</div>
+        <div class="q-excerpt">ივლისის შუა რიცხვებში ფოთლები ქვევიდან იწყებს გაყვითლებას. მორწყვა რეგულარულია, მაგრამ პრობლემა გრძელდება.</div>
+        <div class="ai-strip">
+          <div class="ai-icon">AI</div>
+          <div class="ai-text">სიმინდის ქვედა ფოთლების გაყვითლება ივლისში ყველაზე ხშირად მიუთითებს აზოტის დეფიციტზე ან pH-ის დარღვევაზე. გირჩევ პირველ რიგში ნიადაგის pH შეამოწმო — იდეალური მაჩვენებელია 6.0-6.8...</div>
+        </div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">გმ</div><span>გიორგი მახარაძე</span></div>
+            <span class="time">3 დღის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              8 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              142 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+</a>
+    <!-- Q2 - hot, open -->
+    <div class="q-card hot" data-status="open" data-cat="water" data-title="ვაზის მორწყვა გვალვის დროს">
+      <div class="vote-col">
+        <button class="vote-btn">▲</button>
+        <span class="vote-count">27</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge open">● ღია</span>
+          <span class="cat-tag">💧 მორწყვა</span>
+          <span class="hot-badge">🔥 ცხელი</span>
+        </div>
+        <div class="q-title">ვაზის მოვლა ივლის-აგვისტოს გვალვაში — რამდენჯერ და რა ოდენობით?</div>
+        <div class="q-excerpt">კახეთში 3 ჰა ვენახი მაქვს. ამ წელს ივლისი განსაკუთრებით მშრალია. ვარ გამწვდომი 2 საათიანი სარწყავი ჯარღვლისგან. სად დავიწყო?</div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">ნი</div><span>ნათია ივანიძე</span></div>
+            <span class="time">6 საათის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              3 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              89 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 - solved -->
+    <div class="q-card solved" data-status="solved" data-cat="market" data-title="კარტოფილის გაყიდვა კახეთში">
+      <div class="vote-col">
+        <button class="vote-btn">▲</button>
+        <span class="vote-count">19</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge solved">✓ გადაჭრილი</span>
+          <span class="cat-tag">📊 ბაზარი</span>
+        </div>
+        <div class="q-title">სად ვყიდი კარტოფილი ყველაზე სამართლიანი ფასით — ბაზარი თუ კოოპერატივი?</div>
+        <div class="q-excerpt">წელს 8 ტონა კარტოფილი მაქვს. ადგილობრივ ბაზარზე შემოთავაზებული ფასი ძალიან დაბალია, შუამავლები კიდევ ნაკლებს სთავაზობენ.</div>
+        <div class="ai-strip">
+          <div class="ai-icon">AI</div>
+          <div class="ai-text">კახეთში კარტოფილის რეალიზაციისთვის ყველაზე ეფექტური გზაა სოფლის მეურნეობის კოოპერატივებთან თანამშრომლობა. კოოპერატივები საშუალოდ 15-20%-ით მაღალ ფასს გვთავაზობენ...</div>
+        </div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">ბკ</div><span>ბადრი კახნიაშვილი</span></div>
+            <span class="time">1 კვირის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              5 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              201 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 - open -->
+    <div class="q-card" data-status="open" data-cat="pest" data-title="ვაზის ჭიამაია">
+      <div class="vote-col">
+        <button class="vote-btn">▲</button>
+        <span class="vote-count">14</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge open">● ღია</span>
+          <span class="cat-tag">🐛 მავნებლები</span>
+        </div>
+        <div class="q-title">ვაზზე გამოჩნდა თეთრი ჭიამაიები — რა პრეპარატი გამოვიყენო?</div>
+        <div class="q-excerpt">ფოთლებზე მცირე თეთრი მწერები გამოჩნდა, ძირითადად ქვედა მხარეს. ბიოლოგიური პრეპარატი გვინდა, ქიმიის გარეშე.</div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">ელ</div><span>ელენე ლომიძე</span></div>
+            <span class="time">2 საათის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count" style="color:#C8A84B">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              1 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              34 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 - solved -->
+    <div class="q-card solved" data-status="solved" data-cat="livestock" data-title="ძროხის მოწველა">
+      <div class="vote-col">
+        <button class="vote-btn">▲</button>
+        <span class="vote-count">22</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge solved">✓ გადაჭრილი</span>
+          <span class="cat-tag">🐄 პირუტყვი</span>
+        </div>
+        <div class="q-title">ძროხამ მოიწველა ნაკლები — კვება თუ სტრესი?</div>
+        <div class="q-excerpt">ბოლო 2 კვირაში რძის წარმოება 30%-ით შემცირდა. ყველაფერი იგივეა — კვება, გრაფიკი. ამინდი ძალიან ცხელია.</div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">ზდ</div><span>ზაზა დარბაიძე</span></div>
+            <span class="time">4 დღის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              6 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              118 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q6 - open -->
+    <div class="q-card" data-status="open" data-cat="harvest" data-title="კომბოსტოს მოსავლის ვადა">
+      <div class="vote-col">
+        <button class="vote-btn">▲</button>
+        <span class="vote-count">9</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge open">● ღია</span>
+          <span class="cat-tag">🌾 მოსავალი</span>
+        </div>
+        <div class="q-title">კომბოსტო — როგორ ვიცი მოსავლის აღების სწორი დრო?</div>
+        <div class="q-excerpt">პირველად ვამუშავებ კომბოსტოს. თავები ჩამოყალიბდა, მაგრამ ზომა ჯერ კიდევ პატარა მგონია. ვიცადო?</div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">მთ</div><span>მზია თოფურია</span></div>
+            <span class="time">1 საათის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count" style="color:#C8A84B">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              0 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              12 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 - solved with AI -->
+    <div class="q-card solved" data-status="solved" data-cat="soil" data-title="კომპოსტის დამზადება">
+      <div class="vote-col">
+        <button class="vote-btn">▲</button>
+        <span class="vote-count">31</span>
+        <button class="vote-btn">▼</button>
+      </div>
+      <div class="q-main">
+        <div class="q-top">
+          <span class="status-badge solved">✓ გადაჭრილი</span>
+          <span class="cat-tag">🪨 ნიადაგი</span>
+        </div>
+        <div class="q-title">მინდა ვცადო კომპოსტი — საიდან დავიწყო, რა ვიყენო?</div>
+        <div class="q-excerpt">პირველად ვაკეთებ კომპოსტს. ვკითხე მეზობლებს, ყველა სხვადასხვა რჩევას იძლევა. ოფიციალური გაიდი სად ვიპოვო?</div>
+        <div class="ai-strip">
+          <div class="ai-icon">AI</div>
+          <div class="ai-text">კომპოსტის დასაწყებად გჭირდება ორი ძირითადი კომპონენტი: "მწვანე" (სველი) — სამზარეულოს ნარჩენები, ბალახი; და "ყავისფერი" (მშრალი) — ფოთლები, მუყაო. პროპორცია 1:3...</div>
+        </div>
+        <div class="q-footer">
+          <div class="q-meta">
+            <div class="author"><div class="avatar">ასი</div><span>ანა სიხარულიძე</span></div>
+            <span class="time">2 კვირის წინ</span>
+          </div>
+          <div class="q-stats">
+            <span class="stat-item answers-count">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              11 პასუხი
+            </span>
+            <span class="stat-item">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              304 ნახვა
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="load-more-wrap">
+      <button id="loadMore">კიდევ კითხვების ჩატვირთვა</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-block">
+      <h4>სტატისტიკა</h4>
+      <div class="stat-row"><span class="s-label">სულ კითხვები</span><span class="s-val">1,240</span></div>
+      <div class="stat-row"><span class="s-label">გადაჭრილი</span><span class="s-val">847</span></div>
+      <div class="stat-row"><span class="s-label">ამ კვირას</span><span class="s-val">34</span></div>
+      <div class="stat-row"><span class="s-label">AI პასუხი</span><span class="s-val">1,240</span></div>
+    </div>
+
+    <div class="sidebar-block">
+      <h4>საუკეთესო ექსპერტები</h4>
+      <div class="top-contributor">
+        <span class="rank">01</span>
+        <div class="avatar-lg">ნმ</div>
+        <div class="contrib-info">
+          <div class="contrib-name">ნინო მაისურაძე</div>
+          <div class="contrib-stat">142 დამოწმებული პასუხი</div>
+        </div>
+        <span class="verified-icon">✓</span>
+      </div>
+      <div class="top-contributor">
+        <span class="rank">02</span>
+        <div class="avatar-lg">გბ</div>
+        <div class="contrib-info">
+          <div class="contrib-name">გიორგი ბერიძე</div>
+          <div class="contrib-stat">98 დამოწმებული პასუხი</div>
+        </div>
+        <span class="verified-icon">✓</span>
+      </div>
+      <div class="top-contributor">
+        <span class="rank">03</span>
+        <div class="avatar-lg">მკ</div>
+        <div class="contrib-info">
+          <div class="contrib-name">მარიამ კობახიძე</div>
+          <div class="contrib-stat">76 დამოწმებული პასუხი</div>
+        </div>
+        <span class="verified-icon">✓</span>
+      </div>
+    </div>
+
+    <div class="sidebar-block">
+      <h4>პოპულარული თემები</h4>
+      <div class="tag-cloud">
+        <span class="tag">ვაზი</span>
+        <span class="tag">სიმინდი</span>
+        <span class="tag">pH</span>
+        <span class="tag">გვალვა</span>
+        <span class="tag">კომპოსტი</span>
+        <span class="tag">ბაზარი</span>
+        <span class="tag">მორწყვა</span>
+        <span class="tag">ძროხა</span>
+        <span class="tag">კარტოფილი</span>
+        <span class="tag">პესტიციდი</span>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ASK QUESTION MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>კითხვის დასმა</h3>
+      <button class="close-btn" id="closeModal">✕</button>
+    </div>
+
+    <div class="form-group">
+      <label>სათაური</label>
+      <input type="text" placeholder="მოკლედ ჩამოაყალიბე პრობლემა..."/>
+    </div>
+
+    <div class="form-group">
+      <label>კატეგორია</label>
+      <select>
+        <option value="">აირჩიე კატეგორია</option>
+        <option>🪨 ნიადაგი</option>
+        <option>💧 მორწყვა</option>
+        <option>🐛 მავნებლები</option>
+        <option>🌾 მოსავალი</option>
+        <option>📊 ბაზარი</option>
+        <option>🐄 პირუტყვი</option>
+        <option>🔧 ტექნოლოგია</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>დეტალური აღწერა</label>
+      <textarea placeholder="დაწვრილებით აღწერე შენი სიტუაცია — რა კულტურა, რა სიმპტომები, რამდენ ხანია..."></textarea>
+    </div>
+
+    <div class="modal-tip">
+      <span class="tip-icon">✨</span>
+      <p>კითხვის გამოქვეყნებისთანავე AI მოგაწვდის მყისიერ პასუხს. ადამიანი ექსპერტები შემდეგ შეამოწმებენ და დაზუსტებენ.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="cancel" id="cancelModal">გაუქმება</button>
+      <button class="submit">კითხვის გამოქვეყნება →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- Modal ---
+  const overlay = document.getElementById('modalOverlay');
+  document.getElementById('openModal').addEventListener('click', e => { e.preventDefault(); overlay.classList.add('open'); });
+  document.getElementById('closeModal').addEventListener('click', () => overlay.classList.remove('open'));
+  document.getElementById('cancelModal').addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+  // --- Vote buttons ---
+  document.querySelectorAll('.vote-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const col = btn.closest('.vote-col');
+      const count = col.querySelector('.vote-count');
+      const isUp = btn.textContent === '▲';
+      const wasVoted = btn.classList.contains('voted');
+
+      col.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('voted'));
+      let val = parseInt(count.textContent);
+      if (!wasVoted) { btn.classList.add('voted'); count.textContent = isUp ? val + 1 : val - 1; }
+      else { count.textContent = val + (isUp ? -1 : 1); }
+    });
+  });
+
+  // --- Filter logic ---
+  const cards = Array.from(document.querySelectorAll('.q-card'));
+  let activeStatus = 'all';
+  let activeCat = 'all';
+  let searchTerm = '';
+
+  function updateFeed() {
+    let visible = 0;
+    cards.forEach(card => {
+      const status = card.dataset.status;
+      const cat = card.dataset.cat;
+      const title = (card.dataset.title || '').toLowerCase();
+
+      const statusMatch = activeStatus === 'all' || status === activeStatus;
+      const catMatch = activeCat === 'all' || cat === activeCat;
+      const searchMatch = !searchTerm || title.includes(searchTerm);
+
+      const show = statusMatch && catMatch && searchMatch;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('feedMeta').innerHTML = `<strong>${visible}</strong> კითხვა`;
+  }
+
+  document.querySelectorAll('.status-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.status-tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeStatus = btn.dataset.status;
+      updateFeed();
+    });
+  });
+
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCat = chip.dataset.cat;
+      updateFeed();
+    });
+  });
+
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchTerm = e.target.value.toLowerCase();
+    updateFeed();
+  });
+
+  // --- Card click (navigate to detail) ---
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      // in real app: window.location.href = 'question.html?id=...'
+      card.style.opacity = '0.7';
+      setTimeout(() => card.style.opacity = '', 200);
+    });
+  });
+
+  // --- Load more ---
+  document.getElementById('loadMore').addEventListener('click', function() {
+    this.textContent = 'იტვირთება...';
+    setTimeout(() => { this.textContent = 'ყველა კითხვა ნაჩვენებია'; this.disabled = true; this.style.opacity = '0.5'; }, 800);
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,441 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>რატომ ყვითლდება სიმინდი – AgroCodna</title>
+  <link rel="stylesheet" href="{% static 'AgroCodna/style/question.css' %}"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="{% url '/' %}" class="logo">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="8" fill="#2A2518"/>
+      <path d="M18 6C18 6 10 12 10 20C10 24.4 13.6 28 18 28C22.4 28 26 24.4 26 20C26 12 18 6 18 6Z" fill="#5A8A3C" opacity="0.9"/>
+      <path d="M18 10L18 28" stroke="#7AB55A" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 17C18 17 14 14 12 16" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 21C18 21 22 18 24 20" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="logo-text">Agro<span>Codna</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{% url '/' %}#how">როგორ მუშაობს</a></li>
+    <li><a href="{% url 'articles-videos' %}">სტატიები</a></li>
+    <li><a href="{% url 'qa' %}" class="active">კითხვა-პასუხი</a></li>
+    <li><a href="{% url 'cow-calculator' %}">კალკულატორი</a></li>
+    <li><a href="{% url 'soil-analyzer' %}">AI ანალიზი</a></li>
+    {% if user.is_authenticated %}
+     <li><a href="{% url 'logout' %}" class="nav-cta">გამოსვლა</a></li>
+    {% else %}
+    <li><a href="{% url 'login' %}" class="nav-cta">შესვლა</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- MAIN -->
+  <div class="main-col">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="{% url '/' %}">მთავარი</a>
+      <span class="sep">›</span>
+      <a href="{% url 'qa' %}">კითხვა-პასუხი</a>
+      <span class="sep">›</span>
+      <span>სიმინდის გაყვითლება</span>
+    </div>
+
+    <!-- QUESTION -->
+    <div class="question-block">
+      <div class="q-header">
+        <div class="vote-col">
+          <button class="vote-btn" id="qVoteUp">▲</button>
+          <span class="vote-count" id="qVoteCount">34</span>
+          <button class="vote-btn" id="qVoteDown">▼</button>
+        </div>
+        <div class="q-title-block">
+          <div class="badges">
+            <span class="badge solved">✓ გადაჭრილი</span>
+            <span class="badge cat">🪨 ნიადაგი</span>
+          </div>
+          <h1>რატომ ყვითლდება ჩემი სიმინდი ივლისში — ნიადაგი თუ წყალი?</h1>
+        </div>
+      </div>
+
+      <div class="q-body">
+        <p>ივლისის შუა რიცხვებში ჩემი სიმინდი იწყებს გაყვითლებას ქვევიდან — ყველაზე ქვედა ფოთლები ჯერ ყვითლდება, შემდეგ ხმება. პრობლემა ნელ-ნელა ზევითაც ვრცელდება.</p>
+        <p>მორწყვა კვირაში ორჯერ — ყოველ სამშაბათს და პარასკევს. ნიადაგი სიმინდამდე ორი წელი ჩამოუმუშავებელი ჩანს. ამინდი ამ წელს განსაკუთრებით ცხელია, 37-38°C.</p>
+        <p>რა შეიძლება იყოს პრობლემის მიზეზი და როგორ გამოვასწორო? ქიმიური პრეპარატების გამოყენება მინდა მოვერიდო.</p>
+      </div>
+
+      <div class="q-footer">
+        <div class="author-info">
+          <div class="avatar">გმ</div>
+          <div class="author-meta">
+            <div class="name">გიორგი მახარაძე</div>
+            <div class="time">3 დღის წინ · კახეთი</div>
+          </div>
+        </div>
+        <div class="q-actions">
+          <button>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            გაზიარება
+          </button>
+          <button>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            შენახვა
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="q-tags">
+      <span class="tag">სიმინდი</span>
+      <span class="tag">გაყვითლება</span>
+      <span class="tag">ნიადაგი</span>
+      <span class="tag">აზოტი</span>
+      <span class="tag">კახეთი</span>
+      <span class="tag">ივლისი</span>
+    </div>
+
+    <!-- ANSWERS -->
+    <div class="answers-header">
+      <h2>8 პასუხი</h2>
+      <select class="sort-answers">
+        <option>ხმები ↓</option>
+        <option>უახლესი</option>
+        <option>ძველი</option>
+      </select>
+    </div>
+
+    <!-- AI ANSWER -->
+    <div class="ai-answer">
+      <div class="ai-header">
+        <div class="ai-label">
+          <div class="ai-icon">AI</div>
+          <div>
+            <div class="ai-name">AgroCodna AI</div>
+            <div class="ai-sub">მყისიერი პასუხი · გამოქვეყნებისთანავე</div>
+          </div>
+        </div>
+        <span class="ai-badge">✦ AI პასუხი</span>
+      </div>
+
+      <div class="ai-body">
+        <p>სიმინდის <strong>ქვედა ფოთლების გაყვითლება</strong> ივლის-აგვისტოში ყველაზე ხშირად სამი მიზეზის გამო ხდება:</p>
+
+        <ol class="ai-steps">
+          <li><span class="step-num">1</span><span><strong>აზოტის დეფიციტი</strong> — ეს ყველაზე გავრცელებული მიზეზია. სიმინდი ინტენსიურ ზრდის ფაზაში (ივლისი) ბევრ აზოტს მოითხოვს. ჩამოუმუშავებელ ნიადაგს შეიძლება ნაკლები ჰქონდეს.</span></li>
+          <li><span class="step-num">2</span><span><strong>pH-ის დარღვევა</strong> — თუ pH 6.0-ზე დაბლაა, ნიადაგში არსებული ელემენტები მცენარეს ვერ ეთვისება. ყვითელი ფოთლები ამის კლასიკური სიმპტომია.</span></li>
+          <li><span class="step-num">3</span><span><strong>სიცხის სტრესი</strong> — 37-38°C ტემპერატურა ფესვების წყლის შეწოვას ამცირებს, ქლოროფილის სინთეზი ირღვევა, ფოთლები ყვითლდება.</span></li>
+        </ol>
+
+        <p><strong>პირველი ნაბიჯები:</strong> შეიძინე ნიადაგის pH სატესტო ნაკრები (ფასი ~15-20 ლარი) და შეამოწმე. იდეალური pH სიმინდისთვის 6.0–6.8-ია. ასევე გაზარდე მორწყვის სიხშირე — ამ სიცხეში კვირაში სამჯერ უნდა ირწყოს.</p>
+      </div>
+
+      <div class="ai-footer">
+        <span class="ai-disclaimer">* AI პასუხი ავტომატურია. ქვემოთ ნახე ექსპერტის დამოწმებული რჩევა.</span>
+        <div class="ai-actions">
+          <button>👍 სასარგებლო</button>
+          <button>👎 არ დამეხმარა</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VERIFIED ANSWER -->
+    <div class="answer-card verified">
+      <div class="answer-header">
+        <div class="vote-col">
+          <button class="vote-btn voted">▲</button>
+          <span class="vote-count">28</span>
+          <button class="vote-btn">▼</button>
+        </div>
+        <div class="answer-meta">
+          <div class="verified-banner">
+            <span class="check">✓</span>
+            <span>დამოწმებული პასუხი</span>
+          </div>
+          <div class="author-row">
+            <div class="avatar">ნმ</div>
+            <span class="author-name">ნინო მაისურაძე</span>
+            <span class="expert-badge">ექსპერტი</span>
+            <span class="answer-time">2 დღის წინ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="answer-body">
+        <p>AI-ის პასუხი სწორი მიმართულებით მიდის. თუმცა შენი აღწერის მიხედვით — <em>ქვედა ფოთლები პირველები ყვითლდება, ზევით ვრცელდება, ნიადაგი ადრე ჩამოუმუშავებელი</em> — ყველაზე სავარაუდო მიზეზი <strong>აზოტის დეფიციტია</strong>.</p>
+
+        <p>აი რა გააკეთე ახლა:</p>
+        <ul class="answer-list">
+          <li>სასწრაფოდ მოასხი <strong>ამონიუმის სულფატი</strong> (21% N) — 20 გ/მ² ნორმით. ეს ბიოლოგიურია და ნიადაგს ამჟავებს, pH-საც გეხმარება.</li>
+          <li>მორწყვა გაზარდე — ამ ტემპერატურაზე კვირაში სამჯერ, დილაობით (7-9 სთ). შუადღეს ნუ ირწყავ.</li>
+          <li>ყვითელ ფოთლებს ნუ მოაჭრი — ისინი ნუტრიენტებს ისევ ბოლომდე გააქვთ.</li>
+          <li>10 დღეში თუ ახალი ფოთლები მწვანეა, აზოტის დეფიციტი დადასტურდა.</li>
+        </ul>
+
+        <p>თუ 10 დღეში გაუმჯობესება არ ჩანს, pH ნამდვილად შეამოწმე — შეიძლება კირის დამატება დაგჭირდეს.</p>
+      </div>
+
+      <div class="answer-footer">
+        <div class="answer-actions">
+          <button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="14 9 9 4 4 9"/><path d="M20 20h-7a4 4 0 0 1-4-4V4"/></svg>
+            სასარგებლო (18)
+          </button>
+          <button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            პასუხი
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANSWER 2 -->
+    <div class="answer-card">
+      <div class="answer-header">
+        <div class="vote-col">
+          <button class="vote-btn">▲</button>
+          <span class="vote-count">11</span>
+          <button class="vote-btn">▼</button>
+        </div>
+        <div class="answer-meta">
+          <div class="author-row">
+            <div class="avatar">გბ</div>
+            <span class="author-name">გიორგი ბერიძე</span>
+            <span class="expert-badge">ექსპერტი</span>
+            <span class="answer-time">2 დღის წინ</span>
+          </div>
+        </div>
+      </div>
+      <div class="answer-body">
+        <p>ნინოს რჩევას ვეთანხმები. დავამატებ — ამ ტემპერატურაზე <strong>mulching</strong> (ნიადაგის დაფარვა ჩალით ან ბალახით 5-7 სმ სისქეზე) ძალიან ეფექტურია. ეს ნიადაგის ტემპერატურას 8-10°C-ით ამცირებს და ტენს ინარჩუნებს.</p>
+        <p>სიმინდის ფესვები ზაფხულში ზედაპირთან ახლოს ვრცელდება — ცხელ ნიადაგში ფესვი სტრესდება და ნუტრიენტების შეწოვა ეცემა. ამიტომ mulching + მორწყვის გაზრდა ერთად გარანტირებული გამოსავალია.</p>
+      </div>
+      <div class="answer-footer">
+        <div class="answer-actions">
+          <button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="14 9 9 4 4 9"/><path d="M20 20h-7a4 4 0 0 1-4-4V4"/></svg>
+            სასარგებლო (7)
+          </button>
+          <button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            პასუხი
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANSWER 3 -->
+    <div class="answer-card">
+      <div class="answer-header">
+        <div class="vote-col">
+          <button class="vote-btn">▲</button>
+          <span class="vote-count">5</span>
+          <button class="vote-btn">▼</button>
+        </div>
+        <div class="answer-meta">
+          <div class="author-row">
+            <div class="avatar">დდ</div>
+            <span class="author-name">დავით დოლიძე</span>
+            <span class="answer-time">1 დღის წინ</span>
+          </div>
+        </div>
+      </div>
+      <div class="answer-body">
+        <p>მე მაქვს ანალოგიური პრობლემა ყოველ ზაფხულს. ამ კომბინაციამ გამომიხსნა: კვირაში ერთხელ <strong>გამხსნელი ორგანული სასუქი</strong> (შლანგით პირდაპირ ფესვებთან) + mulching. სულ ორ კვირაში ახალი ფოთლები ნორმალურ ფერს იღებს.</p>
+      </div>
+      <div class="answer-footer">
+        <div class="answer-actions">
+          <button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="14 9 9 4 4 9"/><path d="M20 20h-7a4 4 0 0 1-4-4V4"/></svg>
+            სასარგებლო (3)
+          </button>
+          <button>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            პასუხი
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPLY BOX -->
+    <div class="reply-box">
+      <h3>შენი პასუხი</h3>
+      <div class="reply-tip">
+        <span class="tip-icon">✨</span>
+        <p>კარგი პასუხი კონკრეტულია — მოიყვანე შენი პირადი გამოცდილება ან ზუსტი ინსტრუქცია. ჩვენი გუნდი საუკეთესო პასუხებს "დამოწმებულის" სტატუსს ანიჭებს.</p>
+      </div>
+      <textarea id="replyText" placeholder="გაუზიარე შენი გამოცდილება ამ პრობლემაზე..."></textarea>
+      <div class="reply-footer">
+        <span class="char-count" id="charCount">0 / 1000 სიმბოლო</span>
+        <button class="reply-submit" id="submitReply">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          პასუხის გამოქვეყნება
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /main-col -->
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-block">
+      <h4>კითხვის სტატუსი</h4>
+      <div class="stat-item-side"><span class="s-label">სტატუსი</span><span class="s-val" style="color:#7AB55A">✓ გადაჭრილი</span></div>
+      <div class="stat-item-side"><span class="s-label">ნახვები</span><span class="s-val">142</span></div>
+      <div class="stat-item-side"><span class="s-label">პასუხები</span><span class="s-val">8</span></div>
+      <div class="stat-item-side"><span class="s-label">ხმები</span><span class="s-val">34</span></div>
+      <div class="stat-item-side"><span class="s-label">დასმულია</span><span class="s-val">3 დღის წინ</span></div>
+    </div>
+
+    <div class="sidebar-block">
+      <h4>მსგავსი კითხვები</h4>
+      <div class="related-q">
+        <div class="rel-status solved"></div>
+        <span class="rel-title">სიმინდი ივნისში ჰყვება — მიზეზი?</span>
+      </div>
+      <div class="related-q">
+        <div class="rel-status solved"></div>
+        <span class="rel-title">ნიადაგის pH კორექცია — სად დავიწყო?</span>
+      </div>
+      <div class="related-q">
+        <div class="rel-status open"></div>
+        <span class="rel-title">სიმინდი არ ყვავის — ამინდი თუ სასუქი?</span>
+      </div>
+      <div class="related-q">
+        <div class="rel-status solved"></div>
+        <span class="rel-title">მორწყვა გვალვაში — კვირაში რამდენჯერ?</span>
+      </div>
+      <div class="related-q">
+        <div class="rel-status open"></div>
+        <span class="rel-title">ორგანული სასუქი სიმინდისთვის</span>
+      </div>
+    </div>
+
+    <div class="sidebar-block">
+      <h4>გაზიარება</h4>
+      <button class="share-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        ლინკის კოპირება
+      </button>
+      <button class="share-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        Facebook-ზე გაზიარება
+      </button>
+    </div>
+
+  </aside>
+
+</div><!-- /page-wrap -->
+
+<script>
+  // Vote on question
+  const qUp = document.getElementById('qVoteUp');
+  const qDown = document.getElementById('qVoteDown');
+  const qCount = document.getElementById('qVoteCount');
+  let qVoted = null;
+
+  [qUp, qDown].forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isUp = btn === qUp;
+      const prev = qVoted;
+      [qUp, qDown].forEach(b => b.classList.remove('voted'));
+      let val = parseInt(qCount.textContent);
+      if (prev === btn) { qVoted = null; qCount.textContent = isUp ? val - 1 : val + 1; }
+      else { btn.classList.add('voted'); qVoted = btn; qCount.textContent = isUp ? val + (prev === qDown ? 2 : 1) : val - (prev === qUp ? 2 : 1); }
+    });
+  });
+
+  // Vote on answers
+  document.querySelectorAll('.answer-card').forEach(card => {
+    const [upBtn, downBtn] = card.querySelectorAll('.vote-btn');
+    const countEl = card.querySelector('.vote-count');
+    let voted = null;
+
+    [upBtn, downBtn].forEach(btn => {
+      btn.addEventListener('click', () => {
+        const isUp = btn === upBtn;
+        const prev = voted;
+        [upBtn, downBtn].forEach(b => b.classList.remove('voted'));
+        let val = parseInt(countEl.textContent);
+        if (prev === btn) { voted = null; countEl.textContent = isUp ? val - 1 : val + 1; }
+        else { btn.classList.add('voted'); voted = btn; countEl.textContent = isUp ? val + (prev === downBtn ? 2 : 1) : val - (prev === upBtn ? 2 : 1); }
+      });
+    });
+  });
+
+  // Char counter
+  const replyText = document.getElementById('replyText');
+  const charCount = document.getElementById('charCount');
+  replyText.addEventListener('input', () => {
+    const len = replyText.value.length;
+    charCount.textContent = `${len} / 1000 სიმბოლო`;
+    charCount.style.color = len > 900 ? '#C8A84B' : '';
+  });
+
+  // Submit reply (fake)
+  document.getElementById('submitReply').addEventListener('click', () => {
+    const text = replyText.value.trim();
+    if (!text) { replyText.style.borderColor = 'rgba(192,57,43,0.5)'; setTimeout(() => replyText.style.borderColor = '', 1000); return; }
+
+    const btn = document.getElementById('submitReply');
+    btn.textContent = 'იგზავნება...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      // Inject new answer
+      const newCard = document.createElement('div');
+      newCard.className = 'answer-card';
+      newCard.style.borderColor = 'rgba(90,138,60,0.4)';
+      newCard.innerHTML = `
+        <div class="answer-header">
+          <div class="vote-col">
+            <button class="vote-btn">▲</button>
+            <span class="vote-count">0</span>
+            <button class="vote-btn">▼</button>
+          </div>
+          <div class="answer-meta">
+            <div class="author-row">
+              <div class="avatar" style="background:#3D3820;color:#E2C97E">შ</div>
+              <span class="author-name">შენ</span>
+              <span class="answer-time">ახლა</span>
+            </div>
+          </div>
+        </div>
+        <div class="answer-body"><p>${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p></div>
+      `;
+
+      document.querySelector('.reply-box').before(newCard);
+      replyText.value = '';
+      charCount.textContent = '0 / 1000 სიმბოლო';
+      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> გამოქვეყნდა!`;
+      btn.style.background = '#3D3820';
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> პასუხის გამოქვეყნება`;
+        btn.style.background = '';
+        btn.disabled = false;
+      }, 2500);
+    }, 700);
+  });
+
+  // Share button
+  document.querySelector('.share-btn').addEventListener('click', () => {
+    navigator.clipboard?.writeText(window.location.href).then(() => {
+      const btn = document.querySelector('.share-btn');
+      const orig = btn.innerHTML;
+      btn.textContent = '✓ კოპირებულია!';
+      setTimeout(() => btn.innerHTML = orig, 1500);
+    });
+  });
+</script>
+
+</body>
+</html>

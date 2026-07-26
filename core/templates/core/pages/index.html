@@ -1,0 +1,357 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroCodna – ფერმერის ციფრული თანაშემწე</title>
+  <link rel="stylesheet" href="{% static 'AgroCodna/style/style.css' %}" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="{% url '/' %}" class="logo">
+      <svg class="logo-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="8" fill="#2A2518"/>
+        <path d="M18 6 C18 6 10 12 10 20 C10 24.4 13.6 28 18 28 C22.4 28 26 24.4 26 20 C26 12 18 6 18 6Z" fill="#5A8A3C" opacity="0.9"/>
+        <path d="M18 10 L18 28" stroke="#7AB55A" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M18 17 C18 17 14 14 12 16" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M18 21 C18 21 22 18 24 20" stroke="#C8A84B" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-text">Agro<span>Codna</span></span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#how">როგორ მუშაობს</a></li>
+      <li><a href="{% url 'articles-videos' %}">სტატიები</a></li>
+      <li><a href="{% url 'qa' %}">კითხვა-პასუხი</a></li>
+      <li><a href="{% url 'cow-calculator' %}">კალკულატორი</a></li>
+    <li><a href="{% url 'soil-analyzer' %}">AI ანალიზი</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}" class="nav-cta">გამოსვლა</a></li>
+      {% else %}
+        <li><a href="{% url 'login' %}" class="nav-cta">შესვლა</a></li>
+      {% endif %}
+      
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <span class="eyebrow">ქართველი ფერმერებისთვის</span>
+        <h1>
+          სწორი <em>ცოდნა</em> –<br/>
+          უკეთესი მოსავალი
+        </h1>
+        <p>
+          AgroCodna აერთიანებს სოფლის მეურნეობის ექსპერტულ სტატიებს, 
+          ვიდეო გაკვეთილებს და ფერმერთა საზოგადოებას — ყველაფერი ერთ 
+          პლატფორმაზე, ქართულად.
+        </p>
+        <div class="hero-actions">
+            <a href="#cta" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            დაიწყე ახლავე
+          </a>
+          <a href="{% url 'qa' %}" class="btn btn-outline">კითხვის დასმა</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="field-visual">
+          <svg viewBox="0 0 440 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0;">
+            <!-- Sky gradient -->
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1C1A14"/>
+                <stop offset="100%" stop-color="#2A2518"/>
+              </linearGradient>
+              <linearGradient id="fieldGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3D3820"/>
+                <stop offset="100%" stop-color="#1C1A14"/>
+              </linearGradient>
+            </defs>
+            <rect width="440" height="330" fill="url(#sky)"/>
+
+            <!-- Ground -->
+            <rect x="0" y="200" width="440" height="130" fill="url(#fieldGrad)"/>
+
+            <!-- Crop rows -->
+            <g opacity="0.7">
+              <!-- Row lines -->
+              <line x1="0" y1="215" x2="440" y2="215" stroke="#3D3820" stroke-width="2"/>
+              <line x1="0" y1="230" x2="440" y2="230" stroke="#3D3820" stroke-width="2"/>
+              <line x1="0" y1="245" x2="440" y2="245" stroke="#3D3820" stroke-width="1.5"/>
+              <line x1="0" y1="258" x2="440" y2="258" stroke="#3D3820" stroke-width="1.5"/>
+              <line x1="0" y1="270" x2="440" y2="270" stroke="#2A2518" stroke-width="1"/>
+            </g>
+
+            <!-- Wheat stalks -->
+            <g id="wheat-group">
+              <!-- stalk set 1 -->
+              <g transform="translate(40, 200)">
+                <line x1="0" y1="0" x2="0" y2="-55" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="0" cy="-60" rx="5" ry="12" fill="#C8A84B" opacity="0.9"/>
+                <line x1="-8" y1="-40" x2="-14" y2="-52" stroke="#5A8A3C" stroke-width="1.5"/>
+                <ellipse cx="-16" cy="-55" rx="4" ry="9" fill="#C8A84B" opacity="0.7"/>
+              </g>
+              <g transform="translate(60, 200)">
+                <line x1="0" y1="0" x2="2" y2="-62" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="2" cy="-68" rx="5" ry="13" fill="#C8A84B" opacity="0.85"/>
+              </g>
+              <g transform="translate(80, 200)">
+                <line x1="0" y1="0" x2="-1" y2="-50" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="-1" cy="-56" rx="4" ry="10" fill="#C8A84B" opacity="0.75"/>
+              </g>
+              <!-- stalk set 2 -->
+              <g transform="translate(150, 200)">
+                <line x1="0" y1="0" x2="1" y2="-58" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="1" cy="-64" rx="5" ry="12" fill="#C8A84B" opacity="0.9"/>
+                <line x1="7" y1="-38" x2="13" y2="-50" stroke="#5A8A3C" stroke-width="1.5"/>
+                <ellipse cx="15" cy="-53" rx="4" ry="9" fill="#C8A84B" opacity="0.7"/>
+              </g>
+              <g transform="translate(170, 200)">
+                <line x1="0" y1="0" x2="0" y2="-65" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="0" cy="-72" rx="5" ry="13" fill="#C8A84B" opacity="0.85"/>
+              </g>
+              <!-- stalk set 3 -->
+              <g transform="translate(270, 200)">
+                <line x1="0" y1="0" x2="-2" y2="-55" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="-2" cy="-61" rx="5" ry="12" fill="#C8A84B" opacity="0.9"/>
+              </g>
+              <g transform="translate(290, 200)">
+                <line x1="0" y1="0" x2="1" y2="-60" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="1" cy="-67" rx="5" ry="13" fill="#C8A84B" opacity="0.8"/>
+                <line x1="-6" y1="-42" x2="-12" y2="-54" stroke="#5A8A3C" stroke-width="1.5"/>
+                <ellipse cx="-14" cy="-57" rx="4" ry="9" fill="#C8A84B" opacity="0.65"/>
+              </g>
+              <g transform="translate(310, 200)">
+                <line x1="0" y1="0" x2="0" y2="-52" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="0" cy="-58" rx="4" ry="10" fill="#C8A84B" opacity="0.75"/>
+              </g>
+              <!-- stalk set 4 -->
+              <g transform="translate(380, 200)">
+                <line x1="0" y1="0" x2="2" y2="-58" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="2" cy="-64" rx="5" ry="12" fill="#C8A84B" opacity="0.85"/>
+              </g>
+              <g transform="translate(400, 200)">
+                <line x1="0" y1="0" x2="-1" y2="-63" stroke="#5A8A3C" stroke-width="2"/>
+                <ellipse cx="-1" cy="-70" rx="5" ry="13" fill="#C8A84B" opacity="0.9"/>
+              </g>
+            </g>
+
+            <!-- Moon / sun glow -->
+            <circle cx="340" cy="70" r="30" fill="none" stroke="#C8A84B" stroke-width="1" opacity="0.15"/>
+            <circle cx="340" cy="70" r="20" fill="#C8A84B" opacity="0.08"/>
+            <circle cx="340" cy="70" r="10" fill="#C8A84B" opacity="0.15"/>
+
+            <!-- Stars -->
+            <circle cx="60" cy="40" r="1.5" fill="#E2C97E" opacity="0.6"/>
+            <circle cx="120" cy="25" r="1" fill="#E2C97E" opacity="0.5"/>
+            <circle cx="200" cy="55" r="1.5" fill="#E2C97E" opacity="0.4"/>
+            <circle cx="260" cy="30" r="1" fill="#E2C97E" opacity="0.7"/>
+            <circle cx="400" cy="45" r="1.5" fill="#E2C97E" opacity="0.5"/>
+            <circle cx="90" cy="80" r="1" fill="#E2C97E" opacity="0.3"/>
+
+            <!-- UI overlay card - floating -->
+            <g transform="translate(240, 100)">
+              <rect x="0" y="0" width="175" height="82" rx="10" fill="#2A2518" stroke="#C8A84B" stroke-width="0.8" stroke-opacity="0.3"/>
+              <!-- verified answer indicator -->
+              <circle cx="16" cy="16" r="6" fill="#5A8A3C"/>
+              <text x="13" y="20" fill="white" font-size="8" font-family="sans-serif">✓</text>
+              <rect x="28" y="10" width="90" height="5" rx="2" fill="#3D3820"/>
+              <rect x="28" y="19" width="60" height="4" rx="2" fill="#3D3820" opacity="0.6"/>
+              <!-- tag -->
+              <rect x="100" y="8" width="55" height="14" rx="3" fill="#5A8A3C" opacity="0.2"/>
+              <text x="127" y="18" fill="#7AB55A" font-size="7" font-family="sans-serif" text-anchor="middle">დამოწმებული</text>
+              <!-- divider -->
+              <line x1="12" y1="34" x2="163" y2="34" stroke="#3D3820" stroke-width="1"/>
+              <!-- question text lines -->
+              <rect x="12" y="42" width="120" height="4" rx="2" fill="#3D3820"/>
+              <rect x="12" y="50" width="95" height="4" rx="2" fill="#3D3820" opacity="0.6"/>
+              <rect x="12" y="58" width="108" height="4" rx="2" fill="#3D3820" opacity="0.4"/>
+              <!-- AI badge -->
+              <rect x="12" y="68" width="32" height="10" rx="3" fill="#C8A84B" opacity="0.15"/>
+              <text x="28" y="76" fill="#C8A84B" font-size="6" font-family="sans-serif" text-anchor="middle">AI პასუხი</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat">
+        <div class="stat-number" data-target="240">0</div>
+        <div class="stat-label">სტატია და ვიდეო</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" data-target="1800">0</div>
+        <div class="stat-label">რეგისტრირებული ფერმერი</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" data-target="430">0</div>
+        <div class="stat-label">გადაჭრილი პრობლემა</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number" data-target="98">0</div>
+        <div class="stat-label">% დაკმაყოფილება</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="section-label">პლატფორმა</div>
+    <h2>როგორ მუშაობს AgroCodna?</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">📚</div>
+        <h3>წაიკითხე ან უყურე</h3>
+        <p>ჩვენი ექსპერტების მიერ მომზადებული სტატიები და ვიდეოები სოფლის მეურნეობის ყველა მნიშვნელოვან თემაზე — ნიადაგიდან მარკეტინგამდე.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">❓</div>
+        <h3>დასვი კითხვა</h3>
+        <p>გაქვს კონკრეტული პრობლემა? დასვი კითხვა საზოგადოებაში. AI მოგცემს მყისიერ პასუხს, ადამიანი ექსპერტები კი დაარეფინირებენ.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">✅</div>
+        <h3>მიიღე სანდო პასუხი</h3>
+        <p>ჩვენი გუნდი ამოწმებს საუკეთესო პასუხებს და ანიჭებს "დამოწმებული" სტატუსს — ისე, რომ ყოველთვის იცოდე რომელ ინფორმაციას ენდო.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE CARDS -->
+  <section class="features" id="knowledge">
+    <div class="feature-card">
+      <span class="card-tag">ცოდნის ბაზა</span>
+      <h3>სტატიები და ვიდეოები</h3>
+      <p>ექსპერტების მიერ დაწერილი რეკომენდაციები ნიადაგის მოვლაზე, მორწყვაზე, მავნებლებთან ბრძოლაზე, ბაზარზე გასვლაზე და სხვა.</p>
+      <div class="card-preview">
+        <div class="preview-item">
+          <span class="dot"></span>
+          <span>ნიადაგის pH-ის კორექცია — პრაქტიკული სახელმძღვანელო</span>
+        </div>
+        <div class="preview-item">
+          <span class="dot"></span>
+          <span>სეზონური მორწყვის გეგმა მცირე მეურნეობებისთვის</span>
+        </div>
+        <div class="preview-item">
+          <span class="dot dot-wheat"></span>
+          <span>ვიდეო: ხილის შენახვა — ოთხი ყველაზე გავრცელებული შეცდომა</span>
+        </div>
+        <div class="preview-item">
+          <span class="dot"></span>
+          <span>მავნებლების ბიოლოგიური კონტროლის მეთოდები</span>
+        </div>
+      </div>
+      <a href="{% url 'articles-videos' %}" class="btn btn-outline">ყველა სტატია →</a>
+    </div>
+
+    <div class="feature-card" id="qa">
+      <span class="card-tag">საზოგადოება</span>
+      <h3>კითხვა-პასუხის ფორუმი</h3>
+      <p>დასვი კონკრეტული კითხვა, მიიღე AI-ის მყისიერი პასუხი და საზოგადოების + ექსპერტების დამოწმებული პასუხები.</p>
+      <div class="card-preview">
+        <div class="preview-item">
+          <span class="dot"></span>
+          <span>რატომ ყვითლდება ჩემი სიმინდი ივლისში?</span>
+          <span class="badge">✓ გადაჭრილი</span>
+        </div>
+        <div class="preview-item">
+          <span class="dot dot-wheat"></span>
+          <span>ვაზის მოვლა გვალვის დროს — რა ვქნა?</span>
+          <span class="badge">✓ გადაჭრილი</span>
+        </div>
+        <div class="preview-item">
+          <span class="dot"></span>
+          <span>სად ვიყიდო კარტოფილი ყველაზე ადეკვატურ ფასად კახეთში?</span>
+          <span class="badge" style="color:#C8A84B;background:rgba(200,168,75,0.12)">3 პასუხი</span>
+        </div>
+        <div class="preview-item">
+          <span class="dot"></span>
+          <span>მინდა ვცადო კომპოსტი — საიდან დავიწყო?</span>
+          <span class="badge" style="color:#C8A84B;background:rgba(200,168,75,0.12)">1 პასუხი</span>
+        </div>
+      </div>
+      <a href="{% url 'qa' %}" class="btn btn-outline">ყველა კითხვა →</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="cta">
+    <h2>მზად ხარ უკეთ გამართო შენი მეურნეობა?</h2>
+    <p>შეუერთდი ათასობით ქართველ ფერმერს — უფასოდ.</p>
+    <div class="cta-actions">
+    {% if user.is_authenticated %}
+    <a href="{% url 'articles-videos' %}" class="btn btn-primary">გაგრძელება</a>
+    {% else %}
+    <a href="{% url 'signup' %}" class="btn btn-primary">რეგისტრაცია — უფასოა</a>
+    {% endif %}
+      <a href="#how" class="btn btn-outline">გაიგე მეტი</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Agro<span>Codna</span></div>
+    <div class="footer-copy">© 2026 AgroCodna · ჰაკათონი</div>
+  </footer>
+
+  <script>
+    // Counter animation
+    function animateCounters() {
+      const counters = document.querySelectorAll('.stat-number[data-target]');
+      const suffixes = ['', '+', '+', '%'];
+
+      counters.forEach((el, i) => {
+        const target = parseInt(el.dataset.target);
+        const duration = 1800;
+        const step = target / (duration / 16);
+        let current = 0;
+
+        const timer = setInterval(() => {
+          current = Math.min(current + step, target);
+          el.textContent = Math.floor(current) + suffixes[i];
+          if (current >= target) clearInterval(timer);
+        }, 16);
+      });
+    }
+
+    // Trigger on scroll into view
+    const statsBar = document.querySelector('.stats-bar');
+    let counted = false;
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !counted) {
+        counted = true;
+        animateCounters();
+      }
+    }, { threshold: 0.3 });
+    observer.observe(statsBar);
+
+    // Smooth active nav link
+    const sections = document.querySelectorAll('section[id], div[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current ? '#F0EAD6' : '';
+      });
+    });
+  </script>
+</body>
+</html>
