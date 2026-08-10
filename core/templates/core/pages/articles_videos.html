@@ -380,9 +380,6 @@
           </div>
         </article>
 
-        <div class="load-more-wrap">
-          <button id="loadMore">კიდევ სტატიების ჩატვირთვა</button>
-        </div>
       </div>
     </div>
 
@@ -496,12 +493,6 @@
     document.getElementById('searchInput').addEventListener('input', e => {
       searchTerm = e.target.value.toLowerCase();
       updateGrid();
-    });
-
-    // Load more (fake)
-    document.getElementById('loadMore').addEventListener('click', function() {
-      this.textContent = 'იტვირთება...';
-      setTimeout(() => { this.textContent = 'ყველა სტატია ნაჩვენებია'; this.disabled = true; this.style.opacity = '0.5'; }, 900);
     });
   </script>
 
