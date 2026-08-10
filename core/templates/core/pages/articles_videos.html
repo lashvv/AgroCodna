@@ -88,359 +88,162 @@
   </div>
 
   <!-- CONTENT -->
-  <div class="content-layout">
-    <div>
-      <div class="article-grid" id="grid">
-        <div class="results-count" id="resultsCount"><strong>12</strong> მასალა ნაპოვნია</div>
+    <div class="content-layout">
+      <div>
+        <div class="article-grid" id="grid">
+          <div class="results-count" id="resultsCount"><strong>12</strong> მასალა ნაპოვნია</div> 
+        {% for item in content %}
+          
+          {% if item.content_type == 'article' %}
+            <!-- CARD-->
+            <article class="card" data-type="{{ item.content_type }}" data-cat="{{ item.theme|lower }}" data-title="{{ item.title }">
+              <div class="card-thumb">
+                <div class="thumb-bg">
+                  <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+                    <rect width="320" height="180" fill="#1C2A2A"/>
+                    <circle cx="160" cy="90" r="55" fill="none" stroke="#5A8A3C" stroke-width="1" stroke-opacity="0.3"/>
+                    <!-- water drops -->
+                    <ellipse cx="100" cy="70" rx="8" ry="12" fill="#3A6B8A" opacity="0.7"/>
+                    <ellipse cx="160" cy="50" rx="8" ry="12" fill="#4A7B9A" opacity="0.8"/>
+                    <ellipse cx="220" cy="70" rx="8" ry="12" fill="#3A6B8A" opacity="0.7"/>
+                    <ellipse cx="130" cy="110" rx="8" ry="12" fill="#2A5B7A" opacity="0.6"/>
+                    <ellipse cx="190" cy="110" rx="8" ry="12" fill="#4A7B9A" opacity="0.75"/>
+                    <!-- lines -->
+                    <line x1="100" y1="82" x2="100" y2="130" stroke="#3A6B8A" stroke-width="1.5" stroke-opacity="0.4"/>
+                    <line x1="160" y1="62" x2="160" y2="130" stroke="#4A7B9A" stroke-width="1.5" stroke-opacity="0.4"/>
+                    <line x1="220" y1="82" x2="220" y2="130" stroke="#3A6B8A" stroke-width="1.5" stroke-opacity="0.4"/>
+                  </svg>
+                </div>
+                <span class="card-type-badge article">სტატია</span>
+              </div>
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="cat-tag">{{ item.theme }}</span>
+                  <span class="dot"></span>
+                  <span>{{ item.date|date:"d F Y" }}</span>
+                </div>
+                <div class="card-title">{{ item.title }}</div>
+                <div class="card-excerpt">{{ item.description|truncatewords:10 }}</div>
+                <div class="card-footer">
+                  <div class="author">
+                    <div class="avatar">გბ</div>
+                    <span>{{ item.Author }}</span>
+                </div>
+              </div>
+            </article>
 
-        <!-- FEATURED -->
-        <article class="card featured" data-type="video" data-cat="soil" data-title="ნიადაგის pH-ის კორექცია">
-          <div class="card-thumb">
-            <div class="thumb-bg">
-              <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                <rect width="280" height="200" fill="#2A2518"/>
-                <rect x="0" y="130" width="280" height="70" fill="#3D3820"/>
-                <circle cx="200" cy="60" r="35" fill="#C8A84B" opacity="0.12"/>
-                <circle cx="200" cy="60" r="20" fill="#C8A84B" opacity="0.1"/>
-                <!-- soil layers -->
-                <rect x="20" y="135" width="240" height="8" rx="2" fill="#5A4A20" opacity="0.8"/>
-                <rect x="20" y="147" width="240" height="6" rx="2" fill="#3D3010" opacity="0.6"/>
-                <rect x="20" y="157" width="240" height="5" rx="2" fill="#2A2010" opacity="0.5"/>
-                <!-- pH meter -->
-                <rect x="110" y="80" width="60" height="80" rx="5" fill="#1C1A14" stroke="#C8A84B" stroke-width="1" stroke-opacity="0.4"/>
-                <rect x="118" y="88" width="44" height="28" rx="3" fill="#2A2518"/>
-                <text x="140" y="106" fill="#7AB55A" font-size="12" font-family="monospace" text-anchor="middle" font-weight="bold">6.8</text>
-                <text x="140" y="116" fill="#B8B09A" font-size="6" font-family="sans-serif" text-anchor="middle">pH დონე</text>
-                <line x1="140" y1="160" x2="140" y2="135" stroke="#C8A84B" stroke-width="2"/>
-                <circle cx="140" cy="162" r="4" fill="#C8A84B"/>
-              </svg>
-            </div>
-            <div class="video-play">
-              <div class="play-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          {% elif item.content_type == 'video' %}       
+            <!-- CARD 3 -->
+            <article class="card" data-type="video" data-cat="pest" data-title="ხილის შენახვა">
+              <div class="card-thumb">
+                <div class="thumb-bg">
+                  <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+                    <rect width="320" height="180" fill="#221A10"/>
+                    <rect x="40" y="100" width="240" height="60" rx="4" fill="#2A2518"/>
+                    <!-- fruit boxes -->
+                    <rect x="60" y="80" width="50" height="50" rx="3" fill="#3D2A10" stroke="#C8A84B" stroke-width="0.5" stroke-opacity="0.3"/>
+                    <circle cx="75" cy="100" r="8" fill="#8B2500" opacity="0.8"/>
+                    <circle cx="95" cy="97" r="7" fill="#7A2000" opacity="0.7"/>
+                    <circle cx="85" cy="112" r="7" fill="#8B2500" opacity="0.75"/>
+                    <rect x="130" y="80" width="50" height="50" rx="3" fill="#2A3A10" stroke="#C8A84B" stroke-width="0.5" stroke-opacity="0.3"/>
+                    <circle cx="145" cy="98" r="9" fill="#2A6A10" opacity="0.8"/>
+                    <circle cx="165" cy="102" r="8" fill="#3A7A20" opacity="0.75"/>
+                    <rect x="200" y="80" width="50" height="50" rx="3" fill="#3A2A10" stroke="#C8A84B" stroke-width="0.5" stroke-opacity="0.3"/>
+                    <ellipse cx="225" cy="103" rx="12" ry="9" fill="#C8A84B" opacity="0.6"/>
+                    <!-- thermometer icon -->
+                    <rect x="148" y="30" width="8" height="30" rx="4" fill="#1C1A14" stroke="#B8B09A" stroke-width="1"/>
+                    <circle cx="152" cy="60" r="6" fill="#C0392B"/>
+                    <rect x="150" y="42" width="4" height="18" rx="2" fill="#C0392B"/>
+                    <text x="162" y="48" fill="#B8B09A" font-size="8" font-family="sans-serif">4°C</text>
+                  </svg>
+                </div>
+                <div class="video-play">
+                  <div class="play-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </div>
+                </div>
+                <span class="card-type-badge video">▶ ვიდეო</span>
+                <span class="duration">12:05</span>
               </div>
-            </div>
-            <span class="card-type-badge video">▶ ვიდეო</span>
-            <span class="duration">18:42</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              <span class="cat-tag">🪨 ნიადაგი</span>
-              <span class="dot"></span>
-              <span>14 ივნისი, 2024</span>
-            </div>
-            <div class="card-title">ნიადაგის pH-ის კორექცია — პრაქტიკული სახელმძღვანელო ქართველი ფერმერებისთვის</div>
-            <div class="card-excerpt">ისწავლე როგორ გაზომო შენი ნიადაგის მჟავიანობა სახლში, რა სიმპტომებს ამჟღავნებს pH-ის დარღვევა მცენარეებში და რა გამოსავლები არსებობს — ცაცხვიდან გოგირდამდე.</div>
-            <div class="card-footer">
-              <div class="author">
-                <div class="avatar">ნმ</div>
-                <span>ნინო მაისურაძე</span>
+              <div class="card-body">
+                <div class="card-meta">
+                  <span class="cat-tag">{{ item.theme }}</span>
+                  <span class="dot"></span>
+                  <span>{{ item.date|date:"d F Y" }}</span>
+                </div>
+                <div class="card-title">{{ item.title }}</div>
+                <div class="card-excerpt">{{ item.description|truncatewords:10 }}</div>
+                <div class="card-footer">
+                  <div class="author">
+                    <div class="avatar">ნმ</div>
+                    <span>{{ item.Author }}</span>
+                  </div>
+                </div>
               </div>
-              <span class="read-time">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                18 წთ
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <!-- CARD 2 -->
-        <article class="card" data-type="article" data-cat="water" data-title="სეზონური მორწყვის გეგმა">
-          <div class="card-thumb">
-            <div class="thumb-bg">
-              <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                <rect width="320" height="180" fill="#1C2A2A"/>
-                <circle cx="160" cy="90" r="55" fill="none" stroke="#5A8A3C" stroke-width="1" stroke-opacity="0.3"/>
-                <!-- water drops -->
-                <ellipse cx="100" cy="70" rx="8" ry="12" fill="#3A6B8A" opacity="0.7"/>
-                <ellipse cx="160" cy="50" rx="8" ry="12" fill="#4A7B9A" opacity="0.8"/>
-                <ellipse cx="220" cy="70" rx="8" ry="12" fill="#3A6B8A" opacity="0.7"/>
-                <ellipse cx="130" cy="110" rx="8" ry="12" fill="#2A5B7A" opacity="0.6"/>
-                <ellipse cx="190" cy="110" rx="8" ry="12" fill="#4A7B9A" opacity="0.75"/>
-                <!-- lines -->
-                <line x1="100" y1="82" x2="100" y2="130" stroke="#3A6B8A" stroke-width="1.5" stroke-opacity="0.4"/>
-                <line x1="160" y1="62" x2="160" y2="130" stroke="#4A7B9A" stroke-width="1.5" stroke-opacity="0.4"/>
-                <line x1="220" y1="82" x2="220" y2="130" stroke="#3A6B8A" stroke-width="1.5" stroke-opacity="0.4"/>
-              </svg>
-            </div>
-            <span class="card-type-badge article">სტატია</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              <span class="cat-tag">💧 მორწყვა</span>
-              <span class="dot"></span>
-              <span>8 ივნისი, 2024</span>
-            </div>
-            <div class="card-title">სეზონური მორწყვის გეგმა მცირე მეურნეობებისთვის</div>
-            <div class="card-excerpt">გაზაფხულიდან შემოდგომამდე — ოპტიმალური მორწყვის განრიგი სხვადასხვა კულტურისთვის.</div>
-            <div class="card-footer">
-              <div class="author">
-                <div class="avatar">გბ</div>
-                <span>გიორგი ბერიძე</span>
-              </div>
-              <span class="read-time">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                7 წთ
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <!-- CARD 3 -->
-        <article class="card" data-type="video" data-cat="pest" data-title="ხილის შენახვა">
-          <div class="card-thumb">
-            <div class="thumb-bg">
-              <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                <rect width="320" height="180" fill="#221A10"/>
-                <rect x="40" y="100" width="240" height="60" rx="4" fill="#2A2518"/>
-                <!-- fruit boxes -->
-                <rect x="60" y="80" width="50" height="50" rx="3" fill="#3D2A10" stroke="#C8A84B" stroke-width="0.5" stroke-opacity="0.3"/>
-                <circle cx="75" cy="100" r="8" fill="#8B2500" opacity="0.8"/>
-                <circle cx="95" cy="97" r="7" fill="#7A2000" opacity="0.7"/>
-                <circle cx="85" cy="112" r="7" fill="#8B2500" opacity="0.75"/>
-                <rect x="130" y="80" width="50" height="50" rx="3" fill="#2A3A10" stroke="#C8A84B" stroke-width="0.5" stroke-opacity="0.3"/>
-                <circle cx="145" cy="98" r="9" fill="#2A6A10" opacity="0.8"/>
-                <circle cx="165" cy="102" r="8" fill="#3A7A20" opacity="0.75"/>
-                <rect x="200" y="80" width="50" height="50" rx="3" fill="#3A2A10" stroke="#C8A84B" stroke-width="0.5" stroke-opacity="0.3"/>
-                <ellipse cx="225" cy="103" rx="12" ry="9" fill="#C8A84B" opacity="0.6"/>
-                <!-- thermometer icon -->
-                <rect x="148" y="30" width="8" height="30" rx="4" fill="#1C1A14" stroke="#B8B09A" stroke-width="1"/>
-                <circle cx="152" cy="60" r="6" fill="#C0392B"/>
-                <rect x="150" y="42" width="4" height="18" rx="2" fill="#C0392B"/>
-                <text x="162" y="48" fill="#B8B09A" font-size="8" font-family="sans-serif">4°C</text>
-              </svg>
-            </div>
-            <div class="video-play">
-              <div class="play-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <span class="card-type-badge video">▶ ვიდეო</span>
-            <span class="duration">12:05</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              <span class="cat-tag">🌾 მოსავალი</span>
-              <span class="dot"></span>
-              <span>2 ივნისი, 2024</span>
-            </div>
-            <div class="card-title">ხილის შენახვა — ოთხი ყველაზე გავრცელებული შეცდომა</div>
-            <div class="card-excerpt">ტემპერატურა, ტენიანობა, განათება — ისწავლე ხილის სწორი შენახვის ოთხი ძირითადი პრინციპი.</div>
-            <div class="card-footer">
-              <div class="author">
-                <div class="avatar">ნმ</div>
-                <span>ნინო მაისურაძე</span>
-              </div>
-              <span class="read-time">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                12 წთ
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <!-- CARD 4 -->
-        <article class="card" data-type="article" data-cat="pest" data-title="მავნებლების ბიოლოგიური კონტროლი">
-          <div class="card-thumb">
-            <div class="thumb-bg">
-              <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                <rect width="320" height="180" fill="#1A2010"/>
-                <!-- leaf -->
-                <ellipse cx="160" cy="90" rx="70" ry="50" fill="#2A4A1A" opacity="0.5" transform="rotate(-20,160,90)"/>
-                <line x1="100" y1="110" x2="220" y2="70" stroke="#3A6A2A" stroke-width="2" stroke-opacity="0.6"/>
-                <line x1="160" y1="90" x2="190" y2="60" stroke="#3A6A2A" stroke-width="1" stroke-opacity="0.4"/>
-                <line x1="160" y1="90" x2="130" y2="115" stroke="#3A6A2A" stroke-width="1" stroke-opacity="0.4"/>
-                <!-- ladybug -->
-                <circle cx="185" cy="68" r="12" fill="#8B1A00"/>
-                <circle cx="185" cy="68" r="12" fill="none" stroke="#1A0A00" stroke-width="1"/>
-                <line x1="185" y1="56" x2="185" y2="80" stroke="#1A0A00" stroke-width="1"/>
-                <circle cx="180" cy="62" r="3" fill="#1A0A00"/>
-                <circle cx="190" cy="62" r="3" fill="#1A0A00"/>
-                <circle cx="181" cy="72" r="2.5" fill="#1A0A00"/>
-                <circle cx="189" cy="72" r="2.5" fill="#1A0A00"/>
-                <!-- small bug -->
-                <circle cx="130" cy="105" r="6" fill="#2A8A1A" opacity="0.8"/>
-                <circle cx="120" cy="102" r="4" fill="#2A8A1A" opacity="0.6"/>
-              </svg>
-            </div>
-            <span class="card-type-badge article">სტატია</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              <span class="cat-tag">🐛 მავნებლები</span>
-              <span class="dot"></span>
-              <span>28 მაისი, 2024</span>
-            </div>
-            <div class="card-title">მავნებლების ბიოლოგიური კონტროლის მეთოდები</div>
-            <div class="card-excerpt">ქიმიის გარეშე — ისწავლე ბუნებრივი მტაცებლების გამოყენება მავნე მწერების წინააღმდეგ.</div>
-            <div class="card-footer">
-              <div class="author">
-                <div class="avatar">მკ</div>
-                <span>მარიამ კობახიძე</span>
-              </div>
-              <span class="read-time">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                9 წთ
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <!-- CARD 5 -->
-        <article class="card" data-type="article" data-cat="market" data-title="ბაზარზე გასვლა კახეთში">
-          <div class="card-thumb">
-            <div class="thumb-bg">
-              <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                <rect width="320" height="180" fill="#1A1A2A"/>
-                <!-- bar chart -->
-                <rect x="50" y="110" width="30" height="50" rx="2" fill="#5A8A3C" opacity="0.7"/>
-                <rect x="95" y="80" width="30" height="80" rx="2" fill="#5A8A3C" opacity="0.8"/>
-                <rect x="140" y="95" width="30" height="65" rx="2" fill="#7AB55A" opacity="0.8"/>
-                <rect x="185" y="60" width="30" height="100" rx="2" fill="#C8A84B" opacity="0.85"/>
-                <rect x="230" y="75" width="30" height="85" rx="2" fill="#5A8A3C" opacity="0.75"/>
-                <!-- x axis -->
-                <line x1="40" y1="160" x2="280" y2="160" stroke="#3D3820" stroke-width="1.5"/>
-                <!-- trend line -->
-                <polyline points="65,110 110,80 155,95 200,60 245,75" fill="none" stroke="#E2C97E" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
-              </svg>
-            </div>
-            <span class="card-type-badge article">სტატია</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              <span class="cat-tag">📊 ბაზარი</span>
-              <span class="dot"></span>
-              <span>20 მაისი, 2024</span>
-            </div>
-            <div class="card-title">როგორ გაყიდო პროდუქცია სამართლიანი ფასით კახეთში</div>
-            <div class="card-excerpt">ადგილობრივი ბაზრები, კოოპერატივები და პირდაპირი გაყიდვა — სამი სტრატეგია შემოსავლის გასაზრდელად.</div>
-            <div class="card-footer">
-              <div class="author">
-                <div class="avatar">ლბ</div>
-                <span>ლუკა ბაგრატიონი</span>
-              </div>
-              <span class="read-time">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                11 წთ
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <!-- CARD 6 -->
-        <article class="card" data-type="video" data-cat="livestock" data-title="ძროხის მოვლა">
-          <div class="card-thumb">
-            <div class="thumb-bg">
-              <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                <rect width="320" height="180" fill="#1C1A14"/>
-                <rect x="0" y="130" width="320" height="50" fill="#2A2518"/>
-                <!-- simplified cow silhouette -->
-                <ellipse cx="160" cy="105" rx="55" ry="35" fill="#3D3820"/>
-                <ellipse cx="130" cy="85" rx="25" ry="20" fill="#3D3820"/>
-                <rect x="115" y="138" width="10" height="25" rx="3" fill="#3D3820"/>
-                <rect x="135" y="138" width="10" height="25" rx="3" fill="#3D3820"/>
-                <rect x="160" y="138" width="10" height="25" rx="3" fill="#3D3820"/>
-                <rect x="180" y="138" width="10" height="25" rx="3" fill="#3D3820"/>
-                <!-- spots -->
-                <ellipse cx="165" cy="100" rx="15" ry="10" fill="#2A2518" opacity="0.6"/>
-                <ellipse cx="185" cy="112" rx="10" ry="7" fill="#2A2518" opacity="0.5"/>
-                <!-- eye -->
-                <circle cx="122" cy="82" r="4" fill="#1C1A14"/>
-                <circle cx="123" cy="81" r="1.5" fill="#C8A84B"/>
-                <!-- horn -->
-                <path d="M118 72 Q112 60 120 58" stroke="#C8A84B" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
-              </svg>
-            </div>
-            <div class="video-play">
-              <div class="play-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-            </div>
-            <span class="card-type-badge video">▶ ვიდეო</span>
-            <span class="duration">24:18</span>
-          </div>
-          <div class="card-body">
-            <div class="card-meta">
-              <span class="cat-tag">🐄 ცხოველები</span>
-              <span class="dot"></span>
-              <span>14 მაისი, 2024</span>
-            </div>
-            <div class="card-title">ძროხის მოვლა — კვება, ჰიგიენა და დაავადებების პრევენცია</div>
-            <div class="card-excerpt">ვეტერინარი განმარტავს ყოველდღიური მოვლის ბაზისურ წესებს მაღალი პროდუქტიულობისთვის.</div>
-            <div class="card-footer">
-              <div class="author">
-                <div class="avatar">დდ</div>
-                <span>დავით დოლიძე</span>
-              </div>
-              <span class="read-time">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                24 წთ
-              </span>
-            </div>
-          </div>
-        </article>
-
+            </article>
+          {% endif %}
+        {% endfor %}
+            
+        </div>
       </div>
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+
+        <!-- Popular -->
+        <div class="sidebar-block">
+          <h4>პოპულარული</h4>
+          <div class="popular-item">
+            <span class="pop-num">01</span>
+            <span class="pop-title">ნიადაგის pH-ის კორექცია</span>
+          </div>
+          <div class="popular-item">
+            <span class="pop-num">02</span>
+            <span class="pop-title">მავნებლების ბიოლოგიური კონტროლი</span>
+          </div>
+          <div class="popular-item">
+            <span class="pop-num">03</span>
+            <span class="pop-title">სეზონური მორწყვის გეგმა</span>
+          </div>
+          <div class="popular-item">
+            <span class="pop-num">04</span>
+            <span class="pop-title">ბაზარზე გასვლა ადეკვატური ფასით</span>
+          </div>
+          <div class="popular-item">
+            <span class="pop-num">05</span>
+            <span class="pop-title">ხილის შენახვის შეცდომები</span>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="sidebar-block">
+          <h4>თემები</h4>
+          <div class="tag-cloud">
+            <span class="tag">ვაზი</span>
+            <span class="tag">ნიადაგი</span>
+            <span class="tag">კარტოფილი</span>
+            <span class="tag">სიმინდი</span>
+            <span class="tag">pH</span>
+            <span class="tag">მორწყვა</span>
+            <span class="tag">კომპოსტი</span>
+            <span class="tag">გვალვა</span>
+            <span class="tag">ხილი</span>
+            <span class="tag">მარცვლეული</span>
+            <span class="tag">პესტიციდი</span>
+            <span class="tag">სასუქი</span>
+          </div>
+        </div>
+
+        <!-- Ask CTA -->
+        <div class="sidebar-block">
+          <a class="ask-cta" href="#">
+            <div class="ask-icon">❓</div>
+            <p>ვერ იპოვე პასუხი? დასვი კითხვა ხელოვნურ ინტელექტს — AI მყისიერ პასუხს მოგაწვდის.</p>
+            <span class="ask-btn">კითხვის დასმა</span>
+          </a>
+        </div>
+
+      </aside>
     </div>
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-
-      <!-- Popular -->
-      <div class="sidebar-block">
-        <h4>პოპულარული</h4>
-        <div class="popular-item">
-          <span class="pop-num">01</span>
-          <span class="pop-title">ნიადაგის pH-ის კორექცია</span>
-        </div>
-        <div class="popular-item">
-          <span class="pop-num">02</span>
-          <span class="pop-title">მავნებლების ბიოლოგიური კონტროლი</span>
-        </div>
-        <div class="popular-item">
-          <span class="pop-num">03</span>
-          <span class="pop-title">სეზონური მორწყვის გეგმა</span>
-        </div>
-        <div class="popular-item">
-          <span class="pop-num">04</span>
-          <span class="pop-title">ბაზარზე გასვლა ადეკვატური ფასით</span>
-        </div>
-        <div class="popular-item">
-          <span class="pop-num">05</span>
-          <span class="pop-title">ხილის შენახვის შეცდომები</span>
-        </div>
-      </div>
-
-      <!-- Tags -->
-      <div class="sidebar-block">
-        <h4>თემები</h4>
-        <div class="tag-cloud">
-          <span class="tag">ვაზი</span>
-          <span class="tag">ნიადაგი</span>
-          <span class="tag">კარტოფილი</span>
-          <span class="tag">სიმინდი</span>
-          <span class="tag">pH</span>
-          <span class="tag">მორწყვა</span>
-          <span class="tag">კომპოსტი</span>
-          <span class="tag">გვალვა</span>
-          <span class="tag">ხილი</span>
-          <span class="tag">მარცვლეული</span>
-          <span class="tag">პესტიციდი</span>
-          <span class="tag">სასუქი</span>
-        </div>
-      </div>
-
-      <!-- Ask CTA -->
-      <div class="sidebar-block">
-        <a class="ask-cta" href="#">
-          <div class="ask-icon">❓</div>
-          <p>ვერ იპოვე პასუხი? დასვი კითხვა ხელოვნურ ინტელექტს — AI მყისიერ პასუხს მოგაწვდის.</p>
-          <span class="ask-btn">კითხვის დასმა</span>
-        </a>
-      </div>
-
-    </aside>
-  </div>
 
   <script>
     // --- Filter logic ---

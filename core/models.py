@@ -6,6 +6,7 @@ class Article(models.Model):
     title = models.CharField(max_length=60)
     description = models.TextField()
     content = models.TextField()
+    theme = models.CharField(max_length=30, default=None, null=True)
     date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
     Author = models.ForeignKey(
@@ -19,6 +20,7 @@ class Video(models.Model):
     title = models.CharField(max_length=60)
     description = models.TextField()
     video_file = models.FileField(upload_to='videos/')
+    theme = models.CharField(max_length=30, default=None, null=True)
     date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
     Author = models.ForeignKey(

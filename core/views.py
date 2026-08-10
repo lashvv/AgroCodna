@@ -1,14 +1,26 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-
+from .models import Article, Video
+from itertools import chain
 
 # Create your views here.
 def index(request):
     return render(request, 'core/pages/index.html')
 
 def articles_videos(request):
-    return render(request, 'core/pages/articles_videos.html')
+    articles = Article.objects.all().order_by('-date')
+    videos = Video.objects.all().order_by('-date')
+
+    for article in articles:
+        article.content_type = 'article'
+
+    for video in videos:
+        video.content_type = 'video'
+    
+    content = sorted( chain(articles, videos), key=lambda item: item.date, reverse=True )
+
+    return render(request, 'core/pages/articles_videos.html', {'articles': articles, 'videos': videos, 'content': content})
 
 def qa(request):
     return render(request, 'core/pages/qa.html')
