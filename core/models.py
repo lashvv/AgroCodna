@@ -7,6 +7,7 @@ class Article(models.Model):
     description = models.TextField()
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False)
     Author = models.ForeignKey(
         User,
         on_delete = models.SET_NULL,
@@ -19,6 +20,7 @@ class Video(models.Model):
     description = models.TextField()
     video_file = models.FileField(upload_to='videos/')
     date = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False)
     Author = models.ForeignKey(
         User,
         on_delete = models.SET_NULL,
