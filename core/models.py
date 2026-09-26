@@ -29,3 +29,6 @@ class Video(models.Model):
         null = True,
         related_name = 'videos'
     )
+
+class Image(models.Model):
+    image_file = models.ImageField(upload_to='media/images/')

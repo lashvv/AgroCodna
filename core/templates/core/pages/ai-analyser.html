@@ -48,109 +48,118 @@
     <p>გადაუღე ფოტო შენს ნიადაგს და AI მყისიერად მოგაწვდის ინფორმაციას მის მდგომარეობაზე, პრობლემებსა და რეკომენდაციებზე.</p>
   </div>
 
-
-  <!-- UPLOAD ZONE -->
-  <div class="upload-zone" id="uploadZone">
-    <input type="file" id="fileInput" accept="image/*"/>
-    <div id="uploadPlaceholder">
-      <div class="upload-icon">🌱</div>
-      <div class="upload-label">ფოტოს ატვირთვა ან გადმოთრევა</div>
-      <div class="upload-sub">გადაიღე ნიადაგი ახლოდან, კარგი განათებით</div>
-      <div class="upload-formats">
-        <span>JPG</span><span>PNG</span><span>WEBP</span><span>HEIC</span>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- UPLOAD ZONE -->
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" id="fileInput" name="soil_image" accept="image/*" required/>
+      <div id="uploadPlaceholder">
+        <div class="upload-icon">🌱</div>
+        <div class="upload-label">ფოტოს ატვირთვა ან გადმოთრევა</div>
+        <div class="upload-sub">გადაიღე ნიადაგი ახლოდან, კარგი განათებით</div>
+        <div class="upload-formats">
+          <span>JPG</span><span>PNG</span><span>WEBP</span><span>HEIC</span>
+        </div>
       </div>
+      <img id="previewImg" class="preview-img" style="display:none"/>
     </div>
-    <img id="previewImg" class="preview-img" style="display:none"/>
-    <div class="preview-overlay" id="previewOverlay" style="display:none">
-      <button onclick="clearImage()">სხვა ფოტო</button>
-    </div>
-  </div>
 
-  <!-- ANALYZE BUTTON -->
-  <button class="analyze-btn" id="analyzeBtn" disabled onclick="analyzeImage()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    ნიადაგის ანალიზი
-  </button>
+    <!-- ANALYZE BUTTON -->
+    <button class="analyze-btn" id="analyzeBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      ნიადაგის ანალიზი
+    </button>
+  </form>
 
-  <!-- RESULT PANEL -->
-  <div class="result-panel" id="resultPanel" style="display:none">
+{% if error or result %}
+  <div class="result-panel">
 
-    <!-- Loading -->
-    <div class="loading-state" id="loadingState">
-      <div class="loading-spinner"></div>
-      <div class="loading-title">AI აანალიზებს შენს ნიადაგს...</div>
-      <div class="loading-steps">
-        <div class="ls" id="ls1">📷 ფოტოს დამუშავება</div>
-        <div class="ls" id="ls2">🔬 ფერის და ტექსტურის ანალიზი</div>
-        <div class="ls" id="ls3">🧪 ნუტრიენტების შეფასება</div>
-        <div class="ls" id="ls4">📋 რეკომენდაციების მომზადება</div>
+    {% if error %}
+      <div class="error-state">
+        <div class="error-icon">⚠️</div>
+        <p>ანალიზი ვერ მოხერხდა</p>
+        <small>{{ error }}</small>
       </div>
-    </div>
+    {% endif %}
 
-    <!-- Error -->
-    <div class="error-state" id="errorState" style="display:none">
-      <div class="error-icon">⚠️</div>
-      <p id="errorMsg">შეცდომა მოხდა</p>
-      <small id="errorDetail"></small>
-    </div>
-
-    <!-- Result -->
-    <div id="resultContent" style="display:none">
+    {% if result %}
       <div class="result-header">
         <div class="result-icon">🔬</div>
         <div>
           <div class="result-title">ანალიზის შედეგი</div>
-          <div class="result-sub" id="resultTimestamp"></div>
+          <div class="result-sub">Gemini-ის ვიზუალური შეფასება</div>
         </div>
-        <div class="status-chip" id="statusChip">შეფასება</div>
+        <div class="status-chip">
+          {{ result.status|default:"შეფასება" }}
+        </div>
       </div>
 
       <div class="score-section">
         <div class="score-label">ნიადაგის ჯანმრთელობის ინდექსი</div>
         <div class="score-bar-wrap">
-          <div class="score-bar" id="scoreBar" style="width:0%"></div>
+          <div class="score-bar" style="width: {{ result.healthScore|default:0 }}%"></div>
         </div>
         <div class="score-row">
-          <span class="score-num" id="scoreNum" style="color:#7AB55A">–</span>
-          <span class="score-desc" id="scoreDesc">/ 100</span>
+          <span class="score-num" style="color:#7AB55A">
+            {{ result.healthScore|default:"–" }}
+          </span>
+          <span class="score-desc">/ 100</span>
         </div>
       </div>
 
       <div class="metrics-grid">
         <div class="metric">
           <div class="m-label">ფერი</div>
-          <div class="m-value" id="mColor">–</div>
-          <div class="m-sub" id="mColorSub">ნიადაგის ტონი</div>
+          <div class="m-value">{{ result.color|default:"–" }}</div>
+          <div class="m-sub">ნიადაგის ტონი</div>
         </div>
+
         <div class="metric">
           <div class="m-label">ტექსტურა</div>
-          <div class="m-value" id="mTexture">–</div>
-          <div class="m-sub" id="mTextureSub">სტრუქტურა</div>
+          <div class="m-value">{{ result.texture|default:"–" }}</div>
+          <div class="m-sub">სტრუქტურა</div>
         </div>
+
         <div class="metric">
           <div class="m-label">ტენიანობა</div>
-          <div class="m-value" id="mMoisture">–</div>
-          <div class="m-sub" id="mMoistureSub">ვიზუალური შეფასება</div>
+          <div class="m-value">{{ result.moisture|default:"–" }}</div>
+          <div class="m-sub">ვიზუალური შეფასება</div>
         </div>
       </div>
 
       <div class="analysis-body">
         <div class="section-title">დეტალური ანალიზი</div>
-        <div class="analysis-text" id="analysisText"></div>
-
-        <div class="recommendations" id="recommendationsBlock">
-          <div class="section-title" style="margin-top:1.5rem">რეკომენდაციები</div>
-          <div id="recommendationsList"></div>
+        <div class="analysis-text">
+          {{ result.analysis|linebreaksbr }}
         </div>
+
+        {% if result.recommendations %}
+          <div class="recommendations">
+            <div class="section-title" style="margin-top:1.5rem">რეკომენდაციები</div>
+
+            {% for recommendation in result.recommendations %}
+              <div class="rec-item">
+                <span class="rec-icon">{{ recommendation.icon|default:"💡" }}</span>
+                <span class="rec-text">{{ recommendation.text }}</span>
+                <span class="rec-priority">{{ recommendation.priority|default:"საჭირო" }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
 
       <div class="ai-footer">
-        <span class="ai-label"><span class="ai-dot"></span> Claude Vision AI · მხოლოდ ვიზუალური ანალიზი, არა ლაბორატორიული</span>
-        <button class="new-analysis-btn" onclick="clearAll()">ახალი ანალიზი</button>
+        <span class="ai-label">
+          <span class="ai-dot"></span>
+          Gemini AI · მხოლოდ ვიზუალური ანალიზი, არა ლაბორატორიული
+        </span>
+        <a class="new-analysis-btn" href="{% url 'soil-analyzer' %}">
+          ახალი ანალიზი
+        </a>
       </div>
-    </div>
+    {% endif %}
   </div>
-
+{% endif %}
   <!-- TIPS -->
   <div class="tips-row" id="tipsRow">
     <div class="tip">
@@ -172,6 +181,58 @@
 
 </div>
 
+<script>
+    // Drag & drop
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleFile(file);
+  });
 
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  function handleFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataUrl = e.target.result;
+      const parts = dataUrl.split(',');
+      currentImageB64 = parts[1];
+      currentImageType = file.type || 'image/jpeg';
+
+      previewImg.src = dataUrl;
+      previewImg.style.display = 'block';
+      previewOverlay.style.display = 'flex';
+      uploadPlaceholder.style.display = 'none';
+      uploadZone.classList.add('has-image');
+      fileInput.style.pointerEvents = 'none';
+
+      analyzeBtn.disabled = false;
+      resultPanel.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearImage() {
+    currentImageB64 = null;
+    previewImg.style.display = 'none';
+    previewOverlay.style.display = 'none';
+    uploadPlaceholder.style.display = 'block';
+    uploadZone.classList.remove('has-image');
+    fileInput.style.pointerEvents = '';
+    fileInput.value = '';
+    analyzeBtn.disabled = true;
+    resultPanel.style.display = 'none';
+  }
+
+  function clearAll() {
+    clearImage();
+    document.getElementById('tipsRow').style.display = '';
+  }
+</script>
 </body>
 </html>

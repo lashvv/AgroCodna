@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Article, Video
 from itertools import chain
+from .services.gemini import analyze_soil
 
 # Create your views here.
 def index(request):
@@ -80,4 +81,22 @@ def cow_calculator(request):
     return render(request, 'core/pages/cow_evaluation.html')
 
 def soil_analyzer(request):
-    return render(request, 'core/pages/ai-analyser.html')
+    context = {}
+
+    if request.method == 'POST':
+        image = request.FILES.get("soil_image")
+
+        if not image:
+            context["error"] = "გთხოვთ ატვირთოთ ფოტო"
+        elif image.content_type not in ["image/jpeg", "image/webp", "image/png"]:
+            context["error"] = "გთხოვთ ატვირთოთ მხოლოდ JPG, PNG ან WEBP ფორმატის ფოტო"
+        elif image.size > 10 * 1024 * 1024:
+            context["error"] = "ფოტო უნდა იყოს 10MB-ზე ნაკლები"
+        else:
+            try:
+                context["result"] = analyze_soil(image)
+            except Exception as exc:
+                context["error"] = "შეცდომა ანალიზის პროცესში. გთხოვთ სცადოთ მოგვიანებით."
+                # context["error"] = str(exc)
+
+    return render(request, 'core/pages/ai-analyser.html', context)
