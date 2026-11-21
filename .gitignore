@@ -25,3 +25,5 @@ staticfiles/
 media/
 
 core/data/
+
+core/notebooks/test_notebook.py
